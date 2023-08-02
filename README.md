@@ -9,19 +9,19 @@ Next.js: v13.2.4
 First, clone this project by following stepes:
 
 ```bash
-git clone https://github.com/IsmaelOr/eHome.git
+git clone https://github.com/JulioLugo00/eHome.git
 ```
 
 Second, install all the necessary modules of the project:
 
 ```bash
-npm install
+npm install --legacy-peer-deps
 ```
 
 Third, generate prisma database with the following command:
 
 ```bash
-npx generate prisma
+npx prisma generate
 ```
 
 IMPORTANT: It's necessary to add the environment file, since it contains the access keys and sensitive data, it is not included in the repository, it is necessary to create the '.env' file in the main folder.

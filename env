@@ -1,9 +1,0 @@
-DATABASE_URL="mongodb+srv://jaguarscompany:6SQRQ7j98HECBHXg@cluster0.mrmbvh6.mongodb.net/test"
-NEXTAUTH_SECRET="NEXTAUTH_SECRET"
-
-
-FACEBOOK_ID=619185126374204
-FACEBOOK_SECRET=6bcf7ed3309ef5e0b0224d95a1b7d869
-
-GOOGLE_CLIENT_ID=677415475920-ji1hi9gjv8fmohfafgfsmikntm45uaci.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=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

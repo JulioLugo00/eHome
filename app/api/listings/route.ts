@@ -28,6 +28,14 @@ export async function POST(
         weekDiscount,
         monthlyDiscount,
         firstReservation,
+        state,
+        city,
+        country,
+        address,
+        zipCode,
+        guns,
+        dangerousAnimals,
+        securityCameras,
     } = body;
 
     Object.keys(body).forEach((value: any) => {
@@ -36,11 +44,15 @@ export async function POST(
         }
     });
 
+
+
     const listing = await prisma.listing.create({
         data: {
             title,
             description,
+ 
             imageSrc,
+            
             category,
             type,
             discount,
@@ -50,6 +62,14 @@ export async function POST(
             roomCount,
             bathroomCount,
             guestCount,
+            state,
+            city,
+            country,
+            address,
+            zipCode,
+            guns,
+            dangerousAnimals,
+            securityCameras,
             locationValue: location.value,
             price: parseInt(price, 10),
             userId: currentUser.id,

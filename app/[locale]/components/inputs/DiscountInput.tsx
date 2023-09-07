@@ -11,8 +11,6 @@ interface DiscountInputProps{
     onClick: (value: number) => void;
 }
 
-
-
 const DiscountInput: React.FC<DiscountInputProps> = ({
     label,
     description,

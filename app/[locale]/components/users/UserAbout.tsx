@@ -14,24 +14,11 @@ import {FcIdea} from "react-icons/fc";
 import {BiTime, BiBookOpen, BiMusic} from "react-icons/bi";
 import {FaBirthdayCake, FaHeart, FaLightbulb} from "react-icons/fa";
 import {useTranslations} from 'next-intl';
+import useProfileModal from '@/app/hooks/useProfileModal';
+import useLoginModal from '@/app/hooks/useLoginModal';
 
 interface UserAboutProps{
     data: SafeUser;
-}
-
-const userAbout = {
-    work: 'Engineering',
-    funfact: 'I love basketball',
-    pets: "I don't have it, but I love it",
-    spendtime: "Taking Care of Blessing",
-    biography: "A multiple and tireless human being",
-    live: "Mexico",
-    song: "Watermelon Sugar",
-    guestAtention: "Give tips and talk about existence",
-    born: "25/03/2000",
-    obsessed: "Videogrames and chatting",
-    languages: "English and Spanish",
-    breakfast: "Juice, Bread & Fruits"
 }
 
 const UserAbout: React.FC<UserAboutProps> = ({
@@ -39,65 +26,133 @@ const UserAbout: React.FC<UserAboutProps> = ({
 }) => {
     const router = useRouter();
     const t = useTranslations('Index');
+    const profileModal = useProfileModal();
+    const loginModal = useLoginModal();
+
+    const onProfile = useCallback(() => {
+        if (!data) {
+            return loginModal.onOpen();
+        }
+
+        profileModal.onOpen();
+    }, [data, loginModal, profileModal]);
+
 
     return(
-        <div className="flex flex-col border border-gray-300 rounded-lg p-4 gap-6">
+        <div>
+
+{data.createdProfile ? (
+                
+                <div className="flex flex-col border border-gray-300 rounded-lg p-4 gap-6">
             <div className="font-bold text-xl">{t('about')} {data.name}</div>
             <div className="flex flex-row justify-evenly">
                 <div className="flex flex-col gap-3" style={{ flexBasis: '50%' }}>
                     <div className="flex flex-row gap-3 items-center">
                         <MdOutlineWorkOutline/>
-                        <div>{t('work')}: {userAbout.work}</div>
+                        <div>{t('work')}: {data.work}</div>
                     </div>
                     <div className="flex flex-row gap-3 items-center">
                         <FaLightbulb/>
-                        <div>{t('fun')}: {userAbout.funfact}</div>
+                        <div>{t('fun')}: {data.funFact}</div>
                     </div>
                     <div className="flex flex-row gap-3 items-center">
                         <MdOutlinePets/>
-                        <div>{t('Pets')}: {userAbout.pets}</div>
+                        <div>{t('Pets')}: {data.pets}</div>
                     </div>
                     <div className="flex flex-row gap-3 items-center">
                         <BiTime/>
-                        <div>{t('spend')}: {userAbout.spendtime}</div>
+                        <div>{t('spend')}: {data.spendTime}</div>
                     </div>
                     <div className="flex flex-row gap-3 items-center">
                         <BiBookOpen/>
-                        <div>{t('biografhy')}: {userAbout.biography}</div>
+                        <div>{t('biografhy')}: {data.biography}</div>
                     </div>
                     <div className="flex flex-row gap-3 items-center">
                         <MdLocationPin/>
-                        <div>{t('live')} {userAbout.live}</div>
+                        <div>{t('live')} {data.liveIn}</div>
                     </div>
                 </div>
                 <div className="flex flex-col gap-3" style={{ flexBasis: '50%' }}>
                     <div className="flex flex-row gap-3 items-center">
                         <BiMusic/>
-                        <div>{t('song')}: {userAbout.song}</div>
+                        <div>{t('song')}: {data.song}</div>
                     </div>
                     <div className="flex flex-row gap-3 items-center">
                         <MdRoomService/>
-                        <div>{t('guestA')}: {userAbout.guestAtention}</div>
+                        <div>{t('guestA')}: {data.guestAttention}</div>
                     </div>
                     <div className="flex flex-row gap-3 items-center">
                         <FaBirthdayCake/>
-                        <div>{t('born')} {userAbout.born}</div>
+                        <div>{t('born')}: {new Date(data.birthdate).toLocaleDateString('es-ES')}</div>
                     </div>
                     <div className="flex flex-row gap-3 items-center">
                         <FaHeart/>
-                        <div>{t('obsessed')}: {userAbout.obsessed}</div>
+                        <div>{t('obsessed')}: {data.obsessed}</div>
                     </div>
                     <div className="flex flex-row gap-3 items-center">
                         <MdOutlineGTranslate/>
-                        <div>{t('speaks')}: {userAbout.languages}</div>
+                        <div>{t('speaks')}: {data.languages}</div>
                     </div>
                     <div className="flex flex-row gap-3 items-center">
                         <MdOutlineFreeBreakfast/>
-                        <div>{t('breakfast')}: {userAbout.breakfast}</div>
+                        <div>{t('breakfast')}: {data.breakfast}</div>
                     </div>
                 </div>
             </div>
-            <div>I am a journalist and actor, and in May 2019 I created the vegan brand BENEÇÃO Brasil, with an artisanal factory, store, restaurant and energizing spa. I live in the same house, where I have three bedrooms for hosting. Would you like to be in a vegan place with natural products, tasty food, and an energy proposal? Welcome</div>
+            <div>{data.description}</div>
+            <div 
+                    onClick={onProfile}
+                    className="
+                        hidden
+                        md:block
+                        text-sm
+                        font-semibold
+                        py-3
+                        px-4
+                        rounded-full
+                        hover:bg-neutral-100
+                        bg-[#21c560]
+                        transition
+                        cursor-pointer
+                        w-28
+                    "
+                >
+                    Editar perfil
+            </div>
+        </div>
+                
+                
+               
+            ) : (
+             
+                <div>
+                    <div>
+                        Es hora de crear tu perfil
+                    </div>
+                    <div>
+                        Tu perfil de eHome es una parte importante de todas las reservaciones. Crea el tuyo para que los demás anfitriones y huéspedes te conozcan mejor.
+                    </div>
+                    <div 
+                    onClick={onProfile}
+                    className="
+                        hidden
+                        md:block
+                        text-sm
+                        font-semibold
+                        py-3
+                        px-4
+                        rounded-full
+                        hover:bg-neutral-100
+                        bg-[#21c560]
+                        transition
+                        cursor-pointer
+                        w-28
+                    "
+                >
+                    Crear perfil
+                </div>
+                </div>
+            )}
         </div>
     )
 }

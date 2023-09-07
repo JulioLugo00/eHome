@@ -20,6 +20,23 @@ model User {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   favoriteIds    String[]  @db.ObjectId
+  
+  createdProfile Boolean  @default(false)
+  work           String   @default("")
+  funFact        String   @default("")
+  pets           String   @default("")
+  spendTime      String   @default("")
+  biography      String   @default("")
+  liveIn         String   @default("")
+  song           String   @default("")
+  guestAttention  String  @default("")
+  birthdate      DateTime  @default(now())
+  obsessed       String   @default("")
+  languages      String   @default("")
+  breakfast      String   @default("")
+  description    String   @default("")
+
+
 
   accounts     Account[]
   listings     Listing[]
@@ -63,6 +80,14 @@ model Listing {
   weekDiscount     Int
   monthlyDiscount  Int
   firstReservation Boolean  @default(false)
+  country          String   
+  address          String   
+  city             String  
+  state            String  
+  zipCode          String 
+  guns             Boolean
+  securityCameras  Boolean
+  dangerousAnimals Boolean  
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]

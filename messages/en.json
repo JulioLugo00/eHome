@@ -53,6 +53,13 @@
       "address": "Enter your address",
       "titleLocation": "Where is your place located?",
       "subtitleLocation": "Help guests find you!",
+      "titleAddress": "Confirm your address",
+      "subtitleAddress": "We only share the address after a reservation.",
+      "countryLabel": "Country",
+      "addressLabel": "Address",
+      "cityLabel": "City",
+      "stateLabel": "State",
+      "zipLabel": "ZIP Code",
       "titleInfo": "Share some basics about your place",
       "subtitleInfo": "What amenities do you have?",
       "rooms": "Rooms",
@@ -82,6 +89,11 @@
       "descriptionD2": "For stays of 7 nights or more",
       "discount3": "Monthly discount",
       "descriptionD3": "For stays of 28 nights or more",
+      "titleSecurity": "Last step",
+      "subtitleSecurity": "Does your property have any of these?",
+      "guns": "Guns",
+      "securityCameras": "Security cameras",
+      "dangerousAnimals": "Dangerous animals",
       "price": "Price",
       "filters": "Filters",
       "titleWhere": "Where do you wanna go?",
@@ -128,6 +140,35 @@
       "obsessed": "I'm obsessed with",
       "speaks": "Speaks",
       "breakfast": "What's for breakfast",
-      "e-homeHome": "e-Home your home"
+      "e-homeHome": "e-Home your home",
+      "titleWork": "What do you do for work?",
+      "subtitleWork": "Tell us what your profession is. If you don’t have a traditional job, tell us your life’s calling. Example: Nurse, parent to four kids, or retired surfer.",
+      "titleFunFact": "What’s a fun fact about you?",
+      "subtitleFunFact": "Share something unique or unexpected about you. Example: I was in a music video or I’m a juggler.",
+      "titlePets": "Do you have any pets in your life?",
+      "subtitlePets": "Share any pets you have and their names. Example: My calico cat Whiskers, or Leonardo my speedy turtle.",
+      "titleSpendTime": "What do you spend too much time doing?",
+      "subtitleSpendTime": "Share an activity or hobby you spend lots of free time on. Example: Watching cat videos or playing chess.",
+      "titleBiography": "What would your biography title be?",
+      "subtitleBiography": "If someone wrote a book about your life, what would they call it? Example: Born to Roam or Chronicles of a Dog Mom.",
+      "titleLiveIn": "Live in",
+      "subtitleLiveIn" : "Where do you live?",
+      "titleSong": "Favorite Song",
+      "subtitleSong" : "What is your favorite song",
+      "titleGuestAttention": "Guest Attention",
+      "subtitleGuestAttention": "For guests, I always",
+      "titleBirthdate": "Birthdate",
+      "subtitlebirthdate": "What is your birthdate?",
+      "titleObsessed": "What are you obsessed with?",
+      "subtitleObsessed": "Share whatever you can’t get enough of—in a good way. Example: Baking rosemary focaccia.",
+      "titleLanguages": "Languages",
+      "subtitleLanguages": "Languages you speak",
+      "titleBreakfast" : "Breakfast",
+      "subtitleBreakfast" : "What is for breakfast"
+
+
+
+
+
     }
 }

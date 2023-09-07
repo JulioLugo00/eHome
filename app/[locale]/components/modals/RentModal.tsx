@@ -17,6 +17,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import DiscountInput from "../inputs/DiscountInput";
+import BooleanInput from "../inputs/BooleanInput";
 import ReservationInput from "../inputs/ReservationInput";
 import TypeInput from "../inputs/TypeInput";
 import { AiOutlineHome } from "react-icons/ai";
@@ -28,12 +29,14 @@ enum STEPS {
     CATEGORY = 0,
     TYPE = 1,
     LOCATION = 2,
-    INFO = 3,
-    IMAGES = 4,
-    DESCRIPTION = 5,
-    FIRSTRESERVATION = 6,
-    PRICE = 7,
-    DISCOUNT = 8,
+    ADDRESS = 3,
+    INFO = 4,
+    IMAGES = 5,
+    DESCRIPTION = 6,
+    FIRSTRESERVATION = 7,
+    PRICE = 8,
+    DISCOUNT = 9,
+    SECURITY = 10,
 }
 
 const RentModal = () => {
@@ -57,10 +60,18 @@ const RentModal = () => {
             category: '',
             type: '',
             location: null,
+            country: '',
+            address: '',
+            city: '',
+            state: '',
+            zipCode: '',
+            guns: false,
+            securityCameras: false,
+            dangerousAnimals: false,
             guestCount: 1,
             roomCount: 1,
             bathroomCount: 1,
-            imageSrc: '',
+            imageSrc: [],
             price: 1,
             title: "",
             description: "",
@@ -80,6 +91,9 @@ const RentModal = () => {
     const discount = watch('discount');
     const weekDiscount = watch('weekDiscount');
     const monthlyDiscount = watch('monthlyDiscount');
+    const guns = watch('guns');
+    const securityCameras = watch('securityCameras');
+    const dangerousAnimals = watch('dangerousAnimals')
     const firstReservation = watch('firstReservation');
     const type = watch('type');
 
@@ -105,8 +119,13 @@ const RentModal = () => {
     }
 
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        if(step != STEPS.DISCOUNT){
+        if(step != STEPS.SECURITY){
             return onNext();
+        }
+
+        if (imageSrc.length === 0) {
+            toast.error('Debes cargar al menos una imagen.');
+            return;
         }
 
         setIsLoading(true);
@@ -127,7 +146,7 @@ const RentModal = () => {
     }
 
     const actionLabel = useMemo(() => {
-        if(step == STEPS.DISCOUNT){
+        if(step == STEPS.SECURITY){
             return t('create');
         }
 
@@ -205,6 +224,57 @@ const RentModal = () => {
                 <Map center={location?.latlng}/>
             </div>
         );
+    }
+
+    if(step == STEPS.ADDRESS){
+        bodyContent = (
+            <div className="flex flex-col gap-8">
+                <Heading
+                    title={t("titleAddress")}
+                    subtitle={t("subtitleAddress")}
+                />
+                <Input 
+                    id="country"
+                    label={t("countryLabel")}
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    required
+                />
+                <Input 
+                    id="direction"
+                    label={t("addressLabel")}
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    required
+                />
+                <Input 
+                    id="city"
+                    label={t("cityLabel")}
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    required
+                />
+                <Input 
+                    id="state"
+                    label={t("stateLabel")}
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    required
+                />
+                <Input 
+                    id="zipCode"
+                    label={t("zipLabel")}
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    required
+                />
+            </div>
+        )
     }
     
     if(step == STEPS.INFO){
@@ -326,6 +396,32 @@ const RentModal = () => {
             </div>
         )
     }
+
+    if(step == STEPS.SECURITY){
+        bodyContent = (
+            <div className="flex flex-col gap-8">
+                <Heading title={t("titleSecurity")} subtitle={t("subtitleSecurity")}/>
+                <div className="grid grid-cols-1 gap-3 max-h-[50vh] overflow-y-auto">
+                        <BooleanInput
+                            onClick={(value) => setCustomValue('securityCameras', value)}
+                            initialValue={securityCameras}
+                            label={t('securityCameras')}
+                        />
+                        <BooleanInput 
+                            onClick={(value) => setCustomValue('guns', value)}
+                            initialValue={guns}
+                            label={t('guns')}
+                        />
+                        <BooleanInput
+                            onClick={(value) => setCustomValue('dangerousAnimals', value)}
+                            initialValue={dangerousAnimals}
+                            label={t('dangerousAnimals')}
+                        />
+                </div>
+            </div>
+        )
+    }
+
 
     return (
         <Modal

@@ -7,6 +7,7 @@ import RegisterModal from "./components/modals/RegisterModal"
 import LoginModal from "./components/modals/LoginModal"
 import RentModal from "./components/modals/RentModal"
 import TranslateModal from "./components/modals/TranslateModal"
+import ProfileModal from "./components/modals/ProfileModal"
 
 import ToasterProvider from "./providers/ToasterProvider"
 import getCurrentUser from "../actions/getCurrentUser"
@@ -49,6 +50,7 @@ export default async function RootLayout({children, params: {locale}}: {children
               <TranslateModal />
               <LoginModal/>
               <RegisterModal/>
+              <ProfileModal userId={userId} currentUser={currentUser}/>
               <Navbar currentUser={currentUser} listings={listings}/>
             </ClientOnly>
           <div className="pb-20 pt-28">

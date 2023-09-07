@@ -1,5 +1,7 @@
 'use client';
 
+import { Carousel } from "react-responsive-carousel";
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import useCountries from "@/app/hooks/useCountries";
 import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
 import { Listing, Reservation, User } from "@prisma/client";
@@ -95,7 +97,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
                     overflow-hidden
                     rounded-xl
                 ">
-                    <Image
+                  <Image
                         fill 
                         alt="Listing"
                         src={data.imageSrc}

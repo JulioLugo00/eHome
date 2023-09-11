@@ -22,19 +22,19 @@ model User {
   favoriteIds    String[]  @db.ObjectId
   
   createdProfile Boolean  @default(false)
-  work           String   @default("")
-  funFact        String   @default("")
-  pets           String   @default("")
-  spendTime      String   @default("")
-  biography      String   @default("")
-  liveIn         String   @default("")
-  song           String   @default("")
-  guestAttention  String  @default("")
-  birthdate      DateTime  @default(now())
-  obsessed       String   @default("")
-  languages      String   @default("")
-  breakfast      String   @default("")
-  description    String   @default("")
+  work           String?  @default("")
+  funFact        String?   @default("")
+  pets           String?   @default("")
+  spendTime      String?   @default("")
+  biography      String?   @default("")
+  liveIn         String?   @default("")
+  song           String?   @default("")
+  guestAttention String?  @default("")
+  birthdate      DateTime?  @default(now())
+  obsessed       String?   @default("")
+  languages      String?   @default("")
+  breakfast      String?   @default("")
+  description    String?   @default("")
 
 
 

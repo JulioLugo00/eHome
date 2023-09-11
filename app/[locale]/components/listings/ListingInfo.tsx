@@ -8,6 +8,7 @@ import ListingCategory from "./ListingCategory";
 import dynamic from "next/dynamic";
 import {useRouter} from 'next-intl/client';
 import {useTranslations} from 'next-intl';
+import GMap from "../GMap";
 
 const Map = dynamic(() => import('../Map'), {
     ssr: false
@@ -80,7 +81,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
                 {description}
             </div>
             <hr />
-            <Map center={coordinates} />
+            <GMap center={coordinates} />
         </div>
     );
 }

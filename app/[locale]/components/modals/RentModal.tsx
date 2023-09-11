@@ -8,7 +8,7 @@ import { categories } from "../navbar/Categories";
 import {discounts} from "../navbar/Categories";
 import CategoryInput from "../inputs/CategoryInput";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import CountrySelect from "../inputs/CountrySelect";
+//import CountrySelect from "../inputs/CountrySelect";
 import dynamic from "next/dynamic";
 import Counter from "../inputs/Counter";
 import ImageUpload from "../inputs/ImageUpload";
@@ -24,6 +24,16 @@ import { AiOutlineHome } from "react-icons/ai";
 import { MdOutlineMeetingRoom } from "react-icons/md";
 import {RiParentFill} from "react-icons/ri";
 import {useTranslations} from 'next-intl';
+import MapV2 from "../MapV2";
+import GMap from "../GMap";
+import AddressSelect from "../inputs/AddressSelect";
+import {
+    CitySelect,
+    CountrySelect,
+    StateSelect,
+  } from "react-country-state-city";
+  import "react-country-state-city/dist/react-country-state-city.css";
+
 
 enum STEPS {
     CATEGORY = 0,
@@ -222,11 +232,16 @@ const RentModal = () => {
                     onChange={(value) => setCustomValue('location', value)}
                 />
                 <Map center={location?.latlng}/>
+                <AddressSelect/>
+                <GMap center={location?.latlng}/>
             </div>
         );
     }
 
     if(step == STEPS.ADDRESS){
+        
+
+
         bodyContent = (
             <div className="flex flex-col gap-8">
                 <Heading

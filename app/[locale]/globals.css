@@ -76,3 +76,18 @@ input[type=checkbox]{
 .radio-input:hover ~ .radio-custom {
   border-color: black;
 }
+
+.map-container {
+  width: 100%; /* Ancho del contenedor del mapa */
+  height: 400px; /* Altura del contenedor del mapa */
+  /* Otros estilos CSS según tus necesidades */
+}
+
+.combobox-input {
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.places-container {
+  width: 100%;
+}

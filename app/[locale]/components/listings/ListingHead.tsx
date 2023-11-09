@@ -5,30 +5,34 @@ import { SafeUser } from "@/app/types";
 import Heading from "../Heading";
 import Image from "next/image";
 import HeartButton from "../HeartButton";
+import { Carousel } from "react-responsive-carousel";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 interface ListingHeadProps{
     title: string;
-    locationValue: string;
-    imageSrc: string;
+    imageSrc: string[];
     id: string;
     currentUser?: SafeUser | null;
+    country: string;
+    state: string;
 }
 
 const ListingHead: React.FC<ListingHeadProps> = ({
     title,
-    locationValue,
     imageSrc,
     id,
-    currentUser
+    currentUser,
+    state,
+    country
 }) => {
     const {getByValue} = useCountries();
-
-    const location = getByValue(locationValue);
+  
     return(
         <>
             <Heading 
                 title={title}
-                subtitle={`${location?.region}, ${location?.label}`}
+                subtitle={`${state}, ${country}`}
             />
             <div className="
                 w-full
@@ -36,12 +40,19 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 overflow-hidden
                 relative
             ">
+               <Carousel>
+                {imageSrc.map((src, index) => (
+                <div key={index}>
                 <Image 
-                    alt="Image"
-                    src={imageSrc}
-                    fill
-                    className='object-cover w-full'
-                />
+    src={src} 
+    alt={`Listing ${index}`} 
+    width={300} // Set a default value for now
+    height={300} // Set a default value for now
+    className="object-contain h-full w-full"
+/>
+        </div>
+    ))}
+</Carousel>
                 <div className="absolute top-5 right-5">
                     <HeartButton 
                         listingId={id}

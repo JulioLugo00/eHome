@@ -3,7 +3,6 @@ import ClientOnly from "../components/ClientOnly";
 
 import getCurrentUser from "../../actions/getCurrentUser";
 import getReservations from "../../actions/getReservations";
-import Cli from "@angular/cli";
 import TripsClient from "./TripsClient";
 
 const TripsPage = async () =>{
@@ -18,7 +17,7 @@ const TripsPage = async () =>{
             </ClientOnly>
         )
     }
-
+    //Comenta esta parte de abajo para que no te de error   
     const reservations = await getReservations({
         userId: currentUser.id
     });

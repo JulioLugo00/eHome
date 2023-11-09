@@ -17,6 +17,7 @@ import Link from "next-intl/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Range } from "react-date-range";
 import { toast } from "react-hot-toast";
+import {useTranslations} from 'next-intl';
 
 const initialDateRange = {
     startDate: new Date(),
@@ -39,6 +40,7 @@ const ListingHost: React.FC<ListingHostProps> = ({
 }) => {
     const loginModal = useLoginModal();
     const router = useRouter();
+    const t = useTranslations('Index');
 
     const disableDates = useMemo(() => {
         let dates: Date[] = [];
@@ -104,60 +106,60 @@ const ListingHost: React.FC<ListingHostProps> = ({
                     <ListingHead 
                         title={listing.title}
                         imageSrc={listing.imageSrc}
-                        locationValue={listing.locationValue}
+                        state={listing.state}
+                        country={listing.country}
                         id={listing.id}
                         currentUser={currentUser}
                     />
                     <hr/>
                     <div className="flex flex-row justify-between items-center">
                         <SubHeading 
-                            title="Información del alojamiento"
+                            title={t('propertyInformation')}
                         />
                         <div onClick={() => router.push(`/hosting/listings/${listing.id}/details`)} className="hidden underline md:block text-sm font-semibold py-1 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer">
-                            Editar
+                            {t('edit')}
                         </div>
                     </div>
                     <hr/>
                     <div className="flex flex-row justify-between items-center">
                         <SubHeading 
-                            title="Precios y disponibilidad"
+                            title={t('pricesAndAvailability')}
                         />
-                        <Link href={`/hosting/listings/${listing.id}/pricing`}>
-                            <div className="hidden underline md:block text-sm font-semibold py-1 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer">
-                                Editar
-                            </div>
-                        </Link>
+                        <div onClick={() => router.push(`/hosting/listings/${listing.id}/pricing`)} className="hidden underline md:block text-sm font-semibold py-1 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer">
+                            {t('edit')}
+                        </div>
+
                     </div>
                     <hr/>
                     <div className="flex flex-row justify-between items-center">
                         <SubHeading 
-                            title="Politícas y Reglas"
+                            title={t('policiesAndRules')}
                         />
                         <Link href={`/hosting/listings/${listing.id}/rules`}>
                             <div className="hidden underline md:block text-sm font-semibold py-1 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer">
-                                Editar
+                                {t('edit')}
                             </div>
                         </Link>
                     </div>
                     <hr/>
                     <div className="flex flex-row justify-between items-center">
                         <SubHeading 
-                            title="Información para los huéspedes"
+                            title={t("informationForGuests")}
                         />
                         <Link href={`/hosting/listings/${listing.id}/info-guests`}>
                             <div className="hidden underline md:block text-sm font-semibold py-1 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer">
-                                Editar
+                                {t('edit')}
                             </div>
                         </Link>
                     </div>
                     <hr/>
                     <div className="flex flex-row justify-between items-center">
                         <SubHeading 
-                            title="Coanfitriones"
+                            title={t("coHosts")}
                         />
                         <Link href={`/hosting/listings/${listing.id}/co-hosts`}>
                             <div className="hidden underline md:block text-sm font-semibold py-1 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer">
-                                Editar
+                                {t('edit')}
                             </div>
                         </Link>
                     </div>

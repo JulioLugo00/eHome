@@ -15,6 +15,8 @@ import {AiOutlineArrowRight, AiOutlineArrowLeft} from 'react-icons/ai';
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { Carousel } from "react-responsive-carousel";
+import {useTranslations} from 'next-intl';
 
 const initialDateRange = {
     startDate: new Date(),
@@ -37,9 +39,7 @@ const EditDetails: React.FC<EditDetailsProps> = ({
 }) => { 
 
     const router = useRouter();
-
-    const {getByValue} = useCountries();
-
+    const t = useTranslations('Index');
     const {
         register,
         handleSubmit,
@@ -53,7 +53,6 @@ const EditDetails: React.FC<EditDetailsProps> = ({
         defaultValues: {
             category: '',
             type: '',
-            location: null,
             guestCount: listing.guestCount,
             roomCount: 1,
             bathroomCount: 1,
@@ -97,12 +96,25 @@ const EditDetails: React.FC<EditDetailsProps> = ({
     return(
         <Container>
             <div className="flex flex-col gap-4">
-                <Heading title="Información del alojamiento" subtitle="Modifica los detalles de tu propiedad"/>
+                <Heading title={t('propertyInformation')} subtitle={t("detailsSubtitle")}/>
                 <hr/>
-                <SubHeading title="Fotos"/>
-                <Carrousel image={listing.imageSrc}/>     {/* FALTA COMPLETAR */}
+                <SubHeading title={t("photos")}/>
+                
+                <Carousel>
+                        {listing.imageSrc.map((src, index) => (
+                            <div key={index}>
+                                <img
+                                    src={src} 
+                                    alt={`Listing ${index}`} 
+                                    width={500} // Establecer el tamaño de la imagen como lo necesites
+                                    height={500}
+                                    className="object-cover h-full w-full group-hover:scale-110 transition"
+                                />
+                            </div>
+                        ))}
+                    </Carousel>
                 <hr/>
-                <SubHeading title="Información básica del anuncio"/>
+                <SubHeading title={t("basicInformation")}/>
                 {!showCardInputs[0] && (
                 <InputEdit title="Título del anuncio" value={listing.title} onClick={() => {handleInputEditClick(0)}}/>
                 )}
@@ -186,6 +198,7 @@ const EditDetails: React.FC<EditDetailsProps> = ({
                 <hr/>
                 <SubHeading title="Ubicación"/>
                 <hr/>
+                {/*}
                 {!showCardInputs[5] && (
                 <InputEdit title="Dirección" value={`${getByValue(listing.locationValue)?.region}, ${getByValue(listing.locationValue)?.label}`} onClick={() => {handleInputEditClick(5)}}/>
                 )}
@@ -201,6 +214,7 @@ const EditDetails: React.FC<EditDetailsProps> = ({
                     />
                 )}
                 <hr/>
+                */}
                 {!showCardInputs[6] && (
                 <InputEdit title="Descripción de la zona" value={'Sin especificar'} onClick={() => {handleInputEditClick(6)}}/>
                 )}

@@ -91,13 +91,6 @@ const ProfileModal:React.FC<ProfileModalProps> = ({
         }
     });
 
-    const location = watch('location');
-
-    const Map = useMemo(() => dynamic(() => import("../Map"), {
-        ssr: false
-    }), [location]);
-
-
     const setCustomValue = (id: string, value:any) => {
         setValue(id, value, {
             shouldDirty: true,
@@ -169,7 +162,6 @@ const ProfileModal:React.FC<ProfileModalProps> = ({
                 disabled={isLoading}
                 register={register}
                 errors={errors}
-                defaultValue={currentUser?.work}
             />
         </div>
     )

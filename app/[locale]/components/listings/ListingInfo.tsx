@@ -1,18 +1,15 @@
 'use client';
 
-import useCountries from "@/app/hooks/useCountries";
 import { SafeUser } from "@/app/types";
 import { IconType } from "react-icons";
 import Avatar from "../Avatar";
 import ListingCategory from "./ListingCategory";
-import dynamic from "next/dynamic";
 import {useRouter} from 'next-intl/client';
 import {useTranslations} from 'next-intl';
 import GMap from "../GMap";
+import React, { useState, useEffect } from 'react';
 
-const Map = dynamic(() => import('../Map'), {
-    ssr: false
-})
+
 
 interface ListingInfoProps{
     user: SafeUser;
@@ -25,7 +22,9 @@ interface ListingInfoProps{
         label: string;
         description: string;
     }  | undefined
-    locationValue: string;
+    longitude:  number | null;
+    latitude: number | null;
+
 }
 
 const ListingInfo: React.FC<ListingInfoProps> = ({
@@ -35,12 +34,49 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
     roomCount,
     bathroomCount,
     category,
-    locationValue
+    longitude,
+    latitude
 }) => {
-    const {getByValue} = useCountries();
-    const coordinates = getByValue(locationValue)?.latlng;
+
     const router = useRouter();
+
+    const [currentLocale, setCurrentLocale] = useState("es");
     const t = useTranslations('Index');
+    const [translatedDescription, setTranslatedDescription] = useState<string | null>(null);
+    
+    
+
+
+    useEffect(() => {
+      // Traduce la descripción al montar el componente
+      const extractedLocale = window.location.pathname.split('/')[1];
+      const validLocales = ["es", "en"];
+    
+      if (validLocales.includes(extractedLocale)) {
+          setCurrentLocale(extractedLocale);
+      }
+
+
+      fetch('/api/translate', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              text: description,
+              targetLanguage: currentLocale, // El idioma de la URL
+          }),
+      })
+      .then(response => response.text())
+      .then(data => {
+          setTranslatedDescription(data);
+      })
+      .catch(error => {
+          console.error("Error translating description:", error);
+      });
+  }, [description]);
+
+
     return(
         <div className="col-span-4 flex flex-col gap-8">
             <div className="flex flex-col gap-2">
@@ -78,10 +114,10 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
             )}
             <hr />
             <div className="text-lg font-light text-neutral-500">
-                {description}
+            {translatedDescription || description} {/* Muestra la descripción traducida o la original si la traducción no está disponible */}
             </div>
             <hr />
-            <GMap center={coordinates} />
+            <GMap center={[latitude || 0, longitude || 0]} />
         </div>
     );
 }

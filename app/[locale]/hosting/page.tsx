@@ -3,7 +3,6 @@ import ClientOnly from "../components/ClientOnly";
 
 import getCurrentUser from "../../actions/getCurrentUser";
 import getReservations from "../../actions/getReservations";
-import Cli from "@angular/cli";
 import getListings from "@/app/actions/getListings";
 import Hosting from "./Hosting";
 

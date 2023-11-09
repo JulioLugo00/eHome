@@ -10,7 +10,9 @@ export default async function getReservations(
     params: IParams
 ){
     try{
+        
         const {listingId, userId, authorId} = params;
+    
         const query: any = {};
         if(listingId){
             query.listingId = listingId;
@@ -33,6 +35,8 @@ export default async function getReservations(
                 createdAt: 'desc'
             }
         });
+
+
 
         const safeReservations = reservations.map(
             (reservation) => ({

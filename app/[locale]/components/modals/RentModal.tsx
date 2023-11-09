@@ -8,7 +8,7 @@ import { categories } from "../navbar/Categories";
 import {discounts} from "../navbar/Categories";
 import CategoryInput from "../inputs/CategoryInput";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-//import CountrySelect from "../inputs/CountrySelect";
+import CountrySelect from "../inputs/CountrySelect";
 import dynamic from "next/dynamic";
 import Counter from "../inputs/Counter";
 import ImageUpload from "../inputs/ImageUpload";
@@ -24,16 +24,11 @@ import { AiOutlineHome } from "react-icons/ai";
 import { MdOutlineMeetingRoom } from "react-icons/md";
 import {RiParentFill} from "react-icons/ri";
 import {useTranslations} from 'next-intl';
-import MapV2 from "../MapV2";
 import GMap from "../GMap";
 import AddressSelect from "../inputs/AddressSelect";
-import {
-    CitySelect,
-    CountrySelect,
-    StateSelect,
-  } from "react-country-state-city";
-  import "react-country-state-city/dist/react-country-state-city.css";
-
+import ImageUploader from "../inputs/ImageUploader";
+import CountryStateCityInput from "../inputs/CountryStateCityInput";
+import InputSimple from "../inputs/InputSimple";
 
 enum STEPS {
     CATEGORY = 0,
@@ -69,11 +64,7 @@ const RentModal = () => {
         defaultValues: {
             category: '',
             type: '',
-            location: null,
-            country: '',
             address: '',
-            city: '',
-            state: '',
             zipCode: '',
             guns: false,
             securityCameras: false,
@@ -89,11 +80,12 @@ const RentModal = () => {
             weekDiscount: 0,
             monthlyDiscount: 0,
             firstReservation: false,
+            addressGMap: null,
+            countryStateCity: null,
         }
     });
 
     const category = watch('category');
-    const location = watch('location');
     const guestCount = watch('guestCount');
     const roomCount = watch('roomCount');
     const bathroomCount = watch('bathroomCount');
@@ -106,11 +98,8 @@ const RentModal = () => {
     const dangerousAnimals = watch('dangerousAnimals')
     const firstReservation = watch('firstReservation');
     const type = watch('type');
-
-    const Map = useMemo(() => dynamic(() => import("../Map"), {
-        ssr: false
-    }), [location]);
-
+    const addressGMap = watch("addressGMap");
+    const countryStateCity = watch("countryStateCity");
 
     const setCustomValue = (id: string, value:any) => {
         setValue(id, value, {
@@ -137,6 +126,18 @@ const RentModal = () => {
             toast.error('Debes cargar al menos una imagen.');
             return;
         }
+        parseFloat(addressGMap?.latlng[1]);
+        parseFloat(addressGMap?.latlng[0]);
+
+
+        const latitude = parseFloat(addressGMap?.latlng[0]);
+        const longitude = parseFloat(addressGMap?.latlng[1]);
+        data.cityGMap = addressGMap?.cityGMap;
+
+        data.addressGMap = [latitude, longitude];
+
+        
+        
 
         setIsLoading(true);
 
@@ -226,61 +227,34 @@ const RentModal = () => {
     if(step == STEPS.LOCATION){
         bodyContent = (
             <div className="flex flex-col gap-8">
-                <Heading title={t("titleLocation")} subtitle={t("subtitleLocation")}/>
-                <CountrySelect
-                    value={location}
-                    onChange={(value) => setCustomValue('location', value)}
-                />
-                <Map center={location?.latlng}/>
-                <AddressSelect/>
-                <GMap center={location?.latlng}/>
+                <Heading title={t("titleLocation")} subtitle={t("subtitleLocation")}/>          
+                <GMap center={addressGMap?.latlng}/>
+                <AddressSelect value={addressGMap} onChange={(value) => setCustomValue('addressGMap', value)}/>
             </div>
         );
     }
 
     if(step == STEPS.ADDRESS){
-        
-
-
         bodyContent = (
             <div className="flex flex-col gap-8">
                 <Heading
                     title={t("titleAddress")}
                     subtitle={t("subtitleAddress")}
                 />
-                <Input 
-                    id="country"
-                    label={t("countryLabel")}
-                    disabled={isLoading}
-                    register={register}
-                    errors={errors}
-                    required
+                 
+                <CountryStateCityInput 
+                    value={countryStateCity} onChange={(value) => setCustomValue('countryStateCity', value)}
                 />
-                <Input 
-                    id="direction"
+
+                <InputSimple 
+                    id="address"
                     label={t("addressLabel")}
                     disabled={isLoading}
                     register={register}
                     errors={errors}
                     required
                 />
-                <Input 
-                    id="city"
-                    label={t("cityLabel")}
-                    disabled={isLoading}
-                    register={register}
-                    errors={errors}
-                    required
-                />
-                <Input 
-                    id="state"
-                    label={t("stateLabel")}
-                    disabled={isLoading}
-                    register={register}
-                    errors={errors}
-                    required
-                />
-                <Input 
+                <InputSimple 
                     id="zipCode"
                     label={t("zipLabel")}
                     disabled={isLoading}
@@ -309,7 +283,7 @@ const RentModal = () => {
         bodyContent = (
             <div className="flex flex-col gap-8">
                 <Heading title={t("titleImages")} subtitle={t("subtitleImages")}/>
-                <ImageUpload onChange={(value) => setCustomValue('imageSrc', value)} value={imageSrc}/>
+                <ImageUploader onChange={(images: any) => setCustomValue('imageSrc', images)} value={imageSrc}/>
             </div>
         );
     }
@@ -436,7 +410,6 @@ const RentModal = () => {
             </div>
         )
     }
-
 
     return (
         <Modal

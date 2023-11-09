@@ -43,7 +43,6 @@ const ListingCard: React.FC<ListingCardProps> = ({
     const router = useRouter();
     const {getByValue} = useCountries();
     const t = useTranslations('Index');
-    const location = getByValue(data.locationValue);
     const currency = localStorage.getItem("currency");
 
     const handleCancel = useCallback(
@@ -100,7 +99,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
                   <Image
                         fill 
                         alt="Listing"
-                        src={data.imageSrc}
+                        src={data.imageSrc[0]}
                         className="object-cover h-full w-full group-hover:scale-110 transition"
                     />
                     <div className="absolute top-3 right-3">
@@ -111,7 +110,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
                     </div>
                 </div>
                 <div className="font-semibold text-lg">
-                    {location?.region}, {location?.label}
+                    {data.state}, {data.country}
                 </div>
                 <div className="font-light text-neutral-500">
                     {reservationDate || t(data.category)}

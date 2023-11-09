@@ -16,18 +16,18 @@ const Search = () => {
 
     const {getByValue} = useCountries();
 
-    const locationValue = params?.get('locationValue');
+    const country = params?.get('country');
     const startDate = params?.get('startDate');
     const endDate = params?.get('endDate');
     const guestCount = params?.get('guestCount');
 
     const locationLabel = useMemo(() => {
-        if(locationValue){
-            return getByValue(locationValue as string)?.label;
+        if(country){
+            return country;
         }
 
         return t('where');
-    }, [getByValue, locationValue]);
+    }, [country]);
 
     const durationLabel = useMemo(() => {
         if(startDate && endDate){

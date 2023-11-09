@@ -83,7 +83,7 @@ const UserAbout: React.FC<UserAboutProps> = ({
                     </div>
                     <div className="flex flex-row gap-3 items-center">
                         <FaBirthdayCake/>
-                        <div>{t('born')}: {new Date(data.birthdate).toLocaleDateString('es-ES')}</div>
+                        <div>{t('born')}: {data.birthdate ? new Date(data.birthdate).toLocaleDateString('es-ES') : ''}</div>
                     </div>
                     <div className="flex flex-row gap-3 items-center">
                         <FaHeart/>

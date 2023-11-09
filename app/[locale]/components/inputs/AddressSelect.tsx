@@ -1,79 +1,90 @@
-'use client';
-
-import { useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-} from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
-import React, { useEffect } from 'react';
+export type AddressSelectValue = {
+  latlng: number[];
+  cityGMap: string;
+};
 
 interface AddressSelectProps {
-    center?: number[]
+  value?: AddressSelectValue;
+  onChange: (value: AddressSelectValue) => void;
+  center?: number[];
 }
 
-const AddressSelect: React.FC<AddressSelectProps> = () => {
-    const { isLoaded } = useLoadScript({
-        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-        libraries: ["places"],
-      });
+const AddressSelect: React.FC<AddressSelectProps> = ({ value, onChange }) => {
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+    libraries: ["places"],
+  });
 
-      const [selected, setSelected] = useState<{ lat: number, lng: number } | null>(null);
-      
-      if(!isLoaded) return <div>Loading...</div>
-      return <div className="places-container">
-        <PlacesAutocomplete setSelected={setSelected} />
+  const [selected, setSelected] = useState<{ lat: number; lng: number } | null>(
+    value ? { lat: value.latlng[0], lng: value.latlng[1] } : null
+  );
+
+  useEffect(() => {
+    if (value) {
+      setSelected({ lat: value.latlng[0], lng: value.latlng[1] });
+    }
+  }, [value]);
+
+  if (!isLoaded) return <div>Loading...</div>;
+
+  return (
+    <div className="places-container">
+      <PlacesAutocomplete onChange={onChange} />
     </div>
-}
-     
+  );
+};
 
-const PlacesAutocomplete = ({ setSelected }: { setSelected: (location: { lat: number; lng: number }) => void }) => {
-    const {
-      ready,
-      value,
-      setValue,
-      suggestions: { status, data },
-      clearSuggestions,
-    } = usePlacesAutocomplete();
-  
-    const handleSelect = async (address: string) => {
-      setValue(address, false);
-      console.log("AYUDAAAAAAAAAA")
-      clearSuggestions();
-  
-      const results = await getGeocode({ address });
-      const { lat, lng } = await getLatLng(results[0]);
-      setSelected({ lat, lng });
-    };
-  
-    return (
-      <Combobox onSelect={handleSelect}>
-        <ComboboxInput
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          disabled={!ready}
-          className="combobox-input"
-          placeholder="Search an address"
-        />
-        <ComboboxPopover>
-          <ComboboxList>
-            {status === "OK" &&
-              data.map(({ place_id, description }) => (
-                <ComboboxOption key={place_id} value={description} />
-              ))}
-          </ComboboxList>
-        </ComboboxPopover>
-      </Combobox>
-    );
+const PlacesAutocomplete = ({
+  onChange
+}: {
+  onChange: (value: AddressSelectValue) => void;
+}) => {
+  const { ready, value: inputValue, setValue, suggestions: { status, data }, clearSuggestions } = usePlacesAutocomplete();
+
+  const handleSelect = async (address: string) => {
+    setValue(address, false);
+    clearSuggestions();
+    const results = await getGeocode({ address });
+    let cityGMap = ""
+
+    for (let i = 0; i < results[0].address_components.length; i++) {
+      if (results[0].address_components[i].types.includes('locality')) {
+          cityGMap = results[0].address_components[i].long_name;  // o .short_name si prefieres la versión corta
+      }
+    }
+
+    const { lat, lng } = await getLatLng(results[0]);
+    onChange({ latlng: [lat, lng], cityGMap: cityGMap });
   };
 
-  export default AddressSelect;
+  return (
+    <div>
+      <input
+        value={inputValue}
+        onChange={(e) => setValue(e.target.value)}
+        disabled={!ready}
+        className="combobox-input"
+        placeholder="Search an address"
+      />
+      {status === "OK" && (
+        <ul>
+          {data.map(({ place_id, description }) => (
+            <li key={place_id} onClick={() => handleSelect(description)}>
+              {description}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export default AddressSelect;

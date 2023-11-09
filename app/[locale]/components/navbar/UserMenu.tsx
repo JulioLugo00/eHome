@@ -150,14 +150,18 @@ const UserMenu: React.FC<UserMenuProps> = ({
                             onClick={rentModal.onOpen}
                             prefetch={true}
                             route={location.pathname.includes('/hosting') ? '/' : '/hosting'}
-                            label={location.pathname.includes('/hosting') ? 'Switch to traveling' : t("view")}/>
+                            label={location.pathname.includes('/hosting') ? t("switchToTraveling") : t("view")}/>
 
                             <MenuItem 
                             onClick={() => router.push(`/users/${currentUser.id}`)}
                             route={`/users/${currentUser.id}`}
                             label={t('my_profile')}/>
 
-                            <hr />                       
+                            <MenuItem 
+                            onClick={() => router.push(`/admin`)}
+                            route={`/admin`}
+                            label={t('administratorMode')}/>
+                            <hr/>                       
                             
                             <MenuItem 
                             onClick={() => signOut()}

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import prisma from "@/app/libs/prismadb";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import { add } from "date-fns";
 
 export async function POST(
     request: Request
@@ -22,37 +23,35 @@ export async function POST(
         roomCount,
         bathroomCount,
         guestCount,
-        location,
         price,
         discount,
         weekDiscount,
         monthlyDiscount,
         firstReservation,
-        state,
-        city,
-        country,
         address,
         zipCode,
         guns,
         dangerousAnimals,
         securityCameras,
+        addressGMap,
+        countryStateCity,
+        cityGMap,
+    
     } = body;
+
+    console.log(title)
 
     Object.keys(body).forEach((value: any) => {
         if(!body[value]) {
-            NextResponse.error();
+            return NextResponse.error();
         }
     });
-
-
 
     const listing = await prisma.listing.create({
         data: {
             title,
             description,
- 
             imageSrc,
-            
             category,
             type,
             discount,
@@ -62,17 +61,24 @@ export async function POST(
             roomCount,
             bathroomCount,
             guestCount,
-            state,
-            city,
-            country,
             address,
             zipCode,
             guns,
             dangerousAnimals,
             securityCameras,
-            locationValue: location.value,
+            cityGMap,
+            latitude: addressGMap[0],
+            longitude: addressGMap[1],
             price: parseInt(price, 10),
-            userId: currentUser.id,
+            user: {
+                connect: {
+                    id: currentUser.id
+                }
+            },
+        
+            country: countryStateCity.country.label,
+            state: countryStateCity.state.label,
+            city: countryStateCity.city.label
         }
     });
 

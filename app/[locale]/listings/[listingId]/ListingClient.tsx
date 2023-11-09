@@ -14,7 +14,13 @@ import {useRouter} from 'next-intl/client';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Range } from "react-date-range";
 import { toast } from "react-hot-toast";
+import React from "react";
+import { loadStripe } from "@stripe/stripe-js";
 
+/*const stripePromise = loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
+  );
+  */
 const initialDateRange = {
     startDate: new Date(),
     endDate: new Date(),
@@ -37,6 +43,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
     const loginModal = useLoginModal();
     const router = useRouter();
 
+
     const disableDates = useMemo(() => {
         let dates: Date[] = [];
 
@@ -55,14 +62,50 @@ const ListingClient: React.FC<ListingClientProps> = ({
     const [isLoading, setIsLoading] = useState(false);
     const [totalPrice, setTotalPrice] = useState(listing.price);
     const [dateRange, setDateRange] = useState<Range>(initialDateRange);
+    const [currentLocale, setCurrentLocale] = useState("es");
 
-    const onCreateReservation = useCallback(() => {
-        if(!currentUser){
+
+    useEffect(() => {
+        const extractedLocale = window.location.pathname.split('/')[1];
+        const validLocales = ["es", "en"];
+        if (validLocales.includes(extractedLocale)) {
+            setCurrentLocale(extractedLocale);
+        }
+    }, []);
+
+    
+
+    const onCreateReservation = useCallback(async () => {
+        if (!currentUser) {
             return loginModal.onOpen();
         }
-
         setIsLoading(true);
+    /*
+        try {
+            
+            // Llamar al API para iniciar el proceso de pago
+            const response = await axios.post('/api/start-payment', { data: {price: totalPrice,
+                startDate: dateRange.startDate,
+                endDate: dateRange.endDate,
+                userHostName: listing.user.name,
+                listingId: listing.id} });
+            
+                const { transactionId } = response.data;
+                if (!transactionId) {
+                    throw new Error('Transaction ID is missing in the response');
+                }
+                setDateRange(initialDateRange);
+                router.push(`/payment/${transactionId}`);
+                
+        } catch (error) {
+            console.error('Error starting payment:', error);
+            toast.error('Something went wrong starting the payment');
+        } finally {
+            setIsLoading(false);
+        }
+       */
 
+        /*
         axios.post('/api/reservations', {
             totalPrice,
             startDate: dateRange.startDate,
@@ -77,6 +120,63 @@ const ListingClient: React.FC<ListingClientProps> = ({
         }).finally(() => {
             setIsLoading(false);
         })
+        
+
+        axios.post('/api/email-traveler', {
+            data: { language: currentLocale, amount: totalPrice, userNameTraveler: currentUser.name, userNameHost: listing.user.name, titleListing: listing.title, startDate:dateRange.startDate, endDate: dateRange.endDate, idReservation: idReservation},
+        });
+        axios.post('/api/email-host', {
+            data: { language: currentLocale, amount: totalPrice, userNameTraveler: currentUser.name, userNameHost: listing.user.name, titleListing: listing.title, startDate:dateRange.startDate, endDate: dateRange.endDate, idReservation: idReservation},
+        });
+        */
+
+        try {
+            // Espera a que la reserva sea creada antes de continuar
+            const reservationResponse = await axios.post('/api/reservations', {
+              totalPrice,
+              startDate: dateRange.startDate,
+              endDate: dateRange.endDate,
+              listingId: listing?.id,
+            });
+    
+            if (reservationResponse.status === 201 || reservationResponse.status === 200) {
+              console.log('Property reserved!');
+    
+              try {
+                    // Ahora puedes obtener la reserva recién creada
+                    const getReservationResponse = await axios.post('/api/getReservationByData', {
+                    data: {
+                        totalPrice: totalPrice,
+                        startDate: dateRange.startDate,
+                        endDate: dateRange.endDate,
+                        listingId: listing?.id,
+                        userId: currentUser.id
+                    },
+                    });
+        
+                    const idReservation = getReservationResponse.data.id;
+                    axios.post('/api/email-traveler', {
+                        data: { language: currentLocale, amount: totalPrice, userNameTraveler: currentUser.name, userNameHost: currentUser.id, titleListing: listing.title, startDate:dateRange.startDate, endDate: dateRange.endDate, idReservation: idReservation},
+                });
+                axios.post('/api/email-host', {
+                    data: { language: currentLocale, amount: totalPrice, userNameTraveler: currentUser.name, userNameHost: currentUser.id, titleListing: listing.title, startDate:dateRange.startDate, endDate: dateRange.endDate, idReservation: idReservation},
+                });
+                toast.success("successPayment");
+
+                router.push('/trips')
+
+      } catch (getReservationError) {
+        console.error('Error retrieving reservation:', getReservationError);
+        toast.error('Something went wrong');
+      }
+    }
+  } catch (reservationError) {
+    console.error('Error creating reservation:', reservationError);
+    toast.error('Something went wrong');
+  } finally {
+    setIsLoading(false);
+  }
+        
     }, [totalPrice, dateRange, listing?.id, router, currentUser, loginModal]);
 
     useEffect(() => {
@@ -101,9 +201,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     <ListingHead 
                         title={listing.title}
                         imageSrc={listing.imageSrc}
-                        locationValue={listing.locationValue}
                         id={listing.id}
                         currentUser={currentUser}
+                        country={listing.country}
+                        state={listing.state}
                     />
                     <div className="
                         grid
@@ -119,7 +220,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
                             roomCount={listing.roomCount}
                             guestCount={listing.guestCount}
                             bathroomCount={listing.bathroomCount}
-                            locationValue={listing.locationValue}
+                            longitude={listing.longitude}
+                            latitude={listing.latitude}
                         />
                         <div className="order-first mb-10 md:order-last md:col-span-3">
                             <ListingReservation 
@@ -131,8 +233,15 @@ const ListingClient: React.FC<ListingClientProps> = ({
                                 onSubmit={onCreateReservation}
                                 disabled={isLoading}
                                 disabledDates={disableDates}
+                                listing={listing}
+                                userTraveler={currentUser}
+                                userHost={listing.user}
+                                image={listing.imageSrc[0]}
                             />
+
+                            
                         </div>
+                        
                     </div>
                 </div>
             </div>

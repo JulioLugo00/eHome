@@ -6,15 +6,22 @@ import Modal from "./Modal";
 import {useRouter} from 'next-intl/client';
 import {usePathname} from 'next-intl/client';
 import { useSearchParams } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Range } from "react-date-range";
 import dynamic from "next/dynamic";
 import CountrySelect, { CountrySelectValue } from "../inputs/CountrySelect";
-import { formatISO } from "date-fns";
+import { formatISO, set } from "date-fns";
 import Heading from "../Heading";
 import Calendar from "../inputs/Calendar";
 import Counter from "../inputs/Counter";
 import {useTranslations} from 'next-intl';
+import GMap from "../GMap";
+import CountryInput, { CountryValue } from "../inputs/CountryInput";
+import AddressSelect, { AddressSelectValue } from "../inputs/AddressSelect";
+import getListings from "@/app/actions/getListings";
+import GMapListings from "../GMapListings";
+import { SafeListing } from "@/app/types";
+import axios from "axios";
 
 enum STEPS{
     LOCATION = 0,
@@ -27,10 +34,13 @@ const SearchModal = () => {
     const router = useRouter();
     const params = useSearchParams();
     const searchModal = useSearchModal();
-    const [location, setLocation] = useState<CountrySelectValue>();
+    const [address, setAddress] = useState<AddressSelectValue>();
     const [step, setStep] = useState(STEPS.LOCATION);
     const [guestCount, setGuestCount] = useState(1);
     const [roomCount, setRoomCount] = useState(1);
+
+    const [listings, setListings] = useState<SafeListing[]>([]);
+
     const [bathroomCount, setBathroomCount] = useState(1);
     const [dateRange, setDateRange] = useState<Range>({
         startDate: new Date(),
@@ -38,14 +48,36 @@ const SearchModal = () => {
         key: 'selection'
     });
 
-    const Map = useMemo(() => dynamic(() => import('../Map'), {
-        ssr: false,
-    }), [location]);
-
     const onBack = useCallback(() => {
         setStep((value) => value-1);
     }, []);
 
+    const handleCloseModal = () => {
+        searchModal.onClose();
+    }
+
+
+    useEffect(() => {
+        if (address?.cityGMap) {
+            const fetchListings = async () => {
+                try {
+                
+                    const { data } = await axios.post("/api/getListings", {
+                        data: { cityGMapt: address?.cityGMap },
+                    });
+                    setListings(data);  
+                } catch (error) {
+                    console.error("Error fetching listings:", error);
+                }
+            };
+
+            fetchListings();
+        } else {
+            setListings([]);
+        }
+    }, [address]);
+    // Change the type of the state variable to match the type of the objects you are trying to set
+    
     const onNext = useCallback(() => {
         setStep((value) => value+1);
     }, []);
@@ -63,7 +95,7 @@ const SearchModal = () => {
 
         const updatedQuery: any = {
             ... currentQuery,
-            locationValue: location?.value,
+            cityGMap: address?.cityGMap,
             guestCount,
             roomCount,
             bathroomCount
@@ -86,7 +118,7 @@ const SearchModal = () => {
         searchModal.onClose();
         router.push(url);
 
-    }, [step, searchModal, location, router, guestCount, roomCount, bathroomCount, dateRange, onNext, params]);
+    }, [step, searchModal, router, guestCount, roomCount, bathroomCount, dateRange, onNext, params, address]);
 
     const actionLabel = useMemo(() => {
         if(step == STEPS.INFO){
@@ -110,12 +142,12 @@ const SearchModal = () => {
                 title={t('titleWhere')}
                 subtitle={t('subtitleWhere')}
             />
-            <CountrySelect
-                value={location}
-                onChange={(value) => setLocation(value as CountrySelectValue)}
+
+            <GMapListings center={address?.latlng} listings={listings} handleClose={handleCloseModal}/>
+            <AddressSelect
+                value={address}
+                onChange={(value) => setAddress(value as AddressSelectValue)}
             />
-            <hr />
-            <Map center={location?.latlng} />
         </div>
     )
 

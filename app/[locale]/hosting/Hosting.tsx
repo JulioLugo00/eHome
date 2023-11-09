@@ -8,6 +8,7 @@ import { SafeListing, SafeReservation, SafeUser } from "../../types";
 import Heading from "../components/Heading";
 import Container from "../components/Container";
 import ListingCard from "../components/listings/ListingCard";
+import {useTranslations} from 'next-intl';
 
 interface HostingProps{
     reservations: SafeReservation[];
@@ -22,12 +23,13 @@ const Hosting: React.FC<HostingProps> =({
 }) => {
     const router = useRouter();
     const [deletingId, setDeletingId] = useState('');
+    const t = useTranslations('Index');
 
     const onCancelProperty = useCallback((id: string) => {
         setDeletingId(id);
         axios.delete(`/api/listings/${id}`)
         .then(() => {
-            toast.success('Listing deleted');
+            toast.success(t("propertyDeleted"));
             router.refresh();
         })
         .catch((error) =>{
@@ -44,11 +46,11 @@ const Hosting: React.FC<HostingProps> =({
         setDeletingId(id);
         axios.delete(`/api/reservations/${id}`)
         .then(() => {
-            toast.success("Reservation cancelled");
+            toast.success(t("reservationCanceled"));
             router.refresh();
         })
         .catch(() => {
-            toast.error("Something went wrong");
+            toast.error(t("somethingWentWrong"));
         })
         .finally(() => {
             setDeletingId('');
@@ -59,13 +61,13 @@ const Hosting: React.FC<HostingProps> =({
     return(
         <Container>
             <Heading
-                title={`Welcome back, ${currentUser?.name}`}
+                title={`${t("welcomeBack")}, ${currentUser?.name}`}
                 subtitle=""
             />
 
             <Heading 
-                title="Properties"
-                subtitle="List of your properties"
+                title={t("properties")}
+                subtitle={t("listProperties")}
             />
 
             <div className="
@@ -87,18 +89,18 @@ const Hosting: React.FC<HostingProps> =({
                         actionId={property.id}
                         onAction={onCancelProperty}
                         disabled={deletingId==property.id}
-                        actionLabel="Delete property"
+                        actionLabel={t("deleteProperty")}
                         currentUser={currentUser}
                         deleteColor
                         editAction={() => router.push(`/hosting/listings/${property.id}`)}
-                        editLabel="Edit property"
+                        editLabel={t("editProperty")}
                     />
                 ))}
             </div>
 
             <Heading 
-                title="Reservations"
-                subtitle="Bookings on your properties"
+                title={t("reservations")}
+                subtitle={t("bookingsOnProperties")}
             />
 
             <div className="
@@ -121,7 +123,7 @@ const Hosting: React.FC<HostingProps> =({
                         actionId={reservation.id}
                         onAction={onCancelReservation}
                         disabled={deletingId == reservation.id}
-                        actionLabel="Cancel guest reservation"
+                        actionLabel={t("cancelGuestReservation")}
                         currentUser={currentUser}
                     />
                 ))}

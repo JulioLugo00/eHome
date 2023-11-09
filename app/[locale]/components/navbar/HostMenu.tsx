@@ -6,11 +6,13 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useCallback, useState } from "react";
 import MenuItem from "./MenuItem";
 import useRentModal from "@/app/hooks/useRentModal";
+import {useTranslations} from 'next-intl';
 
 const HostMenu = () => {
     const router = useRouter();
     const rentModal = useRentModal();
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
+    const t = useTranslations('Index');
     const toggleOpen = useCallback(() => {
         setIsOpen((value) => !value)
     }, []);
@@ -21,32 +23,27 @@ const HostMenu = () => {
                     <div 
                         onClick={() => {}} 
                         className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer">
-                            Today
+                            {t('today')}
                     </div>
                     <div 
                         onClick={() => {}} 
                         className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer">
-                            Inbox
+                            {t('inbox')}
                     </div> 
                     <div 
                         onClick={() => {}} 
                         className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer">
-                            Calendar
+                            {t('calendar')}
                     </div>
                     <div 
                         onClick={() => {}} 
                         className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer">
-                            Insights
-                    </div>
-                    <div 
-                        onClick={() => {}} 
-                        className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer">
-                            Today
+                            {t('insights')}
                     </div>
                     <div 
                         onClick={toggleOpen} 
                         className="p-4 text-sm font-semibold px-4 py-3 flex flex-row items-center gap-1 rounded-full cursor-pointer hover:bg-neutral-100 transition">
-                            Menu
+                            {t('menu')}
                         <IoIosArrowDown />
                     </div>
             </div>
@@ -69,13 +66,13 @@ const HostMenu = () => {
                         onClick={() => {}}
                         route=''
                         modal={true}
-                        label={'Listings'}/>
+                        label={t('listings')}/>
                         
                         <MenuItem 
                         onClick={() => {}}
                         modal={true}
                         route=''
-                        label={'Reservations'} />
+                        label={t('reservations')} />
                         <MenuItem 
                         onClick={() => {
                             toggleOpen();
@@ -83,28 +80,28 @@ const HostMenu = () => {
                         }}
                         modal={true}
                         route=''
-                        label={'Create a new listing'} />
+                        label={t("createListing")} />
                         <hr />
                         <MenuItem 
                         onClick={() => {}}
                         modal={true}
                         route=''
-                        label={'Guidebooks'} />
+                        label={t("guidebooks")} />
                         <MenuItem 
                         onClick={() => {}}
                         modal={true}
                         route=''
-                        label={'Transaction history'} />
+                        label={t('transactionHistory')} />
                         <MenuItem 
                         onClick={() => {}}
                         modal={true}
                         route=''
-                        label={'Explore hosting resources'} />
+                        label={t("exploreHostingResources")} />
                                                 <MenuItem 
                         onClick={() => {}}
                         modal={true}
                         route=''
-                        label={'Connect with Hosts near you'} />
+                        label={t("connectHosts")} />
                         
                     </>
                 </div>

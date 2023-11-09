@@ -66,14 +66,13 @@ model Listing {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   title            String
   description      String
-  imageSrc         String
+  imageSrc         String[]
   createdAt        DateTime @default(now())
   category         String
   type             String   @default("")
   roomCount        Int
   bathroomCount    Int
   guestCount       Int
-  locationValue    String
   userId           String   @db.ObjectId
   price            Int
   discount         Int
@@ -87,7 +86,10 @@ model Listing {
   zipCode          String 
   guns             Boolean
   securityCameras  Boolean
-  dangerousAnimals Boolean  
+  dangerousAnimals Boolean
+  latitude          Float
+  longitude         Float
+  cityGMap         String?
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
@@ -104,4 +106,14 @@ model Reservation {
 
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model PendingReservation {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @db.ObjectId
+  listingId  String   @db.ObjectId
+  startDate  DateTime
+  endDate    DateTime
+  totalPrice Int
+  userNameHost String
 }

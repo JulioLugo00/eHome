@@ -9,6 +9,7 @@ import { useCallback, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import ListingCard from "../components/listings/ListingCard";
+import {useTranslations} from 'next-intl';
 
 interface TripsClientProps{
     reservations: SafeReservation[];
@@ -21,11 +22,12 @@ const TripsClient: React.FC<TripsClientProps> = ({
 }) => {
     const router = useRouter();
     const[deletingId, setDeletingId] = useState('');
+    const t = useTranslations('Index');
     const onCancel = useCallback((id: string) => {
         setDeletingId(id);
         axios.delete(`/api/reservations/${id}`)
         .then(() => {
-            toast.success('Reservation cancelled');
+            toast.success(t("reservationCanceled"));
             router.refresh();
         })
         .catch((error) =>{
@@ -38,8 +40,8 @@ const TripsClient: React.FC<TripsClientProps> = ({
     return (
         <Container>
             <Heading
-                title="Trips"
-                subtitle="Where you've been and where you're going"
+                title={t("trips")}
+                subtitle={t("subtitleTrips")}
             />
             <div className="
                 mt-10
@@ -60,7 +62,7 @@ const TripsClient: React.FC<TripsClientProps> = ({
                         actionId={reservation.id}
                         onAction={onCancel}
                         disabled={deletingId==reservation.id}
-                        actionLabel="Cancel reservation"
+                        actionLabel={t("cancelReservation")}
                         currentUser={currentUser}
                     />
                 ))}

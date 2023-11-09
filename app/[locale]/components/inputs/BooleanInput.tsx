@@ -50,5 +50,4 @@ const BooleanInput: React.FC<BooleanInputProps> = ({
     );
 }
 
-
 export default BooleanInput;

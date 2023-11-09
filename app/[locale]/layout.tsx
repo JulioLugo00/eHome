@@ -17,6 +17,7 @@ import {NextIntlClientProvider} from 'next-intl';
 import {notFound} from 'next/navigation';
 import fetchExchangeRates from "../actions/getChange"
 import getListings from "../actions/getListings"
+import { Inter } from "next/font/google";
 
 export const metadata = {
   title: 'eHome',

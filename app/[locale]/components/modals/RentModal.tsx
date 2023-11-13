@@ -100,6 +100,7 @@ const RentModal = () => {
     const type = watch('type');
     const addressGMap = watch("addressGMap");
     const countryStateCity = watch("countryStateCity");
+    const currency = localStorage.getItem("currency");
 
     const setCustomValue = (id: string, value:any) => {
         setValue(id, value, {
@@ -340,7 +341,7 @@ const RentModal = () => {
     if(step == STEPS.PRICE){
         bodyContent = (
             <div className="flex flex-col gap-8">
-                <Heading title={t("titlePrice")} subtitle={t("subtitlePrice")}/>
+                <Heading title={t("titlePrice")} subtitle={t("subtitlePrice") + " (" +  currency + ")"}/>
                 <Input
                     id="price"
                     label={t("price")}

@@ -225,6 +225,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
                 endDate: dateRange.endDate, // Fecha de finalización
                 totalPrice: Math.round(total),
                 userNameHost: userHost.name, // Nombre del anfitrión
+                currency: currency
               }),
             });
         

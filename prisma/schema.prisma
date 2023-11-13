@@ -102,6 +102,7 @@ model Reservation {
   startDate  DateTime
   endDate    DateTime
   totalPrice Int
+  currency String
   createdAt  DateTime @default(now())
 
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -116,4 +117,5 @@ model PendingReservation {
   endDate    DateTime
   totalPrice Int
   userNameHost String
+  currency String
 }

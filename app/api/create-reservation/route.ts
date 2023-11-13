@@ -12,10 +12,11 @@ export async function POST(
         startDate,
         endDate,
         totalPrice,
-        userId
+        userId,
+        currency
     } = body;
 
-    if(!listingId || !startDate || !endDate || !totalPrice){
+    if(!listingId || !startDate || !endDate || !totalPrice || !userId || !currency){
         return NextResponse.error();
     }
 
@@ -29,7 +30,8 @@ export async function POST(
                     userId,
                     startDate,
                     endDate,
-                    totalPrice
+                    totalPrice,
+                    currency
                 }
             }
         }

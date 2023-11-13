@@ -55,6 +55,7 @@ export async function POST (req: Request) {
       endDate: data.endDate,
       listingId: data.listingId,
       userId: data.userId,
+      currency: data.currency,
     });
       console.log("DATAAA", data)
 
@@ -70,7 +71,8 @@ export async function POST (req: Request) {
                   startDate: data.startDate,
                   endDate: data.endDate,
                   listingId: data.listingId,
-                  userId: data.userId
+                  userId: data.userId,
+                  currency: data.currency,
               },
               });
   

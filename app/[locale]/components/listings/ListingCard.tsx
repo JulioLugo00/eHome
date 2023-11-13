@@ -43,7 +43,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
     const router = useRouter();
     const {getByValue} = useCountries();
     const t = useTranslations('Index');
-    const currency = localStorage.getItem("currency");
+    //const currency = localStorage.getItem("currency");
 
     const handleCancel = useCallback(
         (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -64,6 +64,14 @@ const ListingCard: React.FC<ListingCardProps> = ({
 
         return data.price;
     }, [reservation, data.price]);
+    
+    let currency = useMemo(() => {
+        if(reservation){
+            return reservation.currency;
+        }
+
+        return localStorage.getItem("currency");
+    }, [reservation, data.price]);
 
     const reservationDate = useMemo(() => {
         if(!reservation){
@@ -78,8 +86,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
 
     if(localStorage.getItem("exchangeRates")){
         let change = JSON.parse(localStorage.getItem("exchangeRates")!);
-        let moneda =  localStorage.getItem("currency")!
-        price = price * parseInt(change.conversion_rates[moneda])
+        if(!reservation && currency && change.conversion_rates[currency]){
+            price = price * parseInt(change.conversion_rates[currency])
+        }
     }
 
     return(

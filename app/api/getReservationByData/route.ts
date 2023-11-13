@@ -6,9 +6,9 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   try {
     const { data } = await req.json();
-    const { startDate, endDate, listingId, totalPrice, userId } = data
+    const { startDate, endDate, listingId, totalPrice, userId, currency } = data
 
-    if (!startDate || !endDate || !listingId || !totalPrice || !userId)  {
+    if (!startDate || !endDate || !listingId || !totalPrice || !userId || !currency)  {
       return new NextResponse("Bad Request", { status: 400 });
     }
 
@@ -18,7 +18,8 @@ export async function POST(req: NextRequest) {
         endDate,
         listingId,
         totalPrice,
-        userId
+        userId,
+        currency
       }
     });
 

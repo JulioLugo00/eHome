@@ -126,7 +126,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
                 </div>
                 <div className="flex flex-row items-center gap-1">
                     <div className="font-semibold">
-                        <MoneyValue value={price} currency={currency ? currency : "USD"} decimals={1}/>
+                        ${price} {currency} 
                     </div>
                     {!reservation && (
                         <div className="font-light">{t('night')}</div>   

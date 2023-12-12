@@ -44,9 +44,6 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
     const t = useTranslations('Index');
     const [translatedDescription, setTranslatedDescription] = useState<string | null>(null);
     
-    
-
-
     useEffect(() => {
       // Traduce la descripción al montar el componente
       const extractedLocale = window.location.pathname.split('/')[1];
@@ -55,7 +52,6 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
       if (validLocales.includes(extractedLocale)) {
           setCurrentLocale(extractedLocale);
       }
-
 
       fetch('/api/translate', {
           method: 'POST',
@@ -75,7 +71,6 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
           console.error("Error translating description:", error);
       });
   }, [description]);
-
 
     return(
         <div className="col-span-4 flex flex-col gap-8">

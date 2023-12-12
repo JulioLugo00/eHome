@@ -10,6 +10,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import ListingCard from "../components/listings/ListingCard";
 import {useTranslations} from 'next-intl';
+import ReservationCard from "../components/listings/ReservationCard";
 
 interface TripsClientProps{
     reservations: SafeReservation[];
@@ -55,7 +56,7 @@ const TripsClient: React.FC<TripsClientProps> = ({
                 gap-8
             ">
                 {reservations.map((reservation) => (
-                    <ListingCard 
+                    <ReservationCard
                         key={reservation.id}
                         data={reservation.listing}
                         reservation={reservation}

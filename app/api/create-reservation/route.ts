@@ -13,7 +13,8 @@ export async function POST(
         endDate,
         totalPrice,
         userId,
-        currency
+        currency,
+        guestNames
     } = body;
 
     if(!listingId || !startDate || !endDate || !totalPrice || !userId || !currency){
@@ -31,7 +32,8 @@ export async function POST(
                     startDate,
                     endDate,
                     totalPrice,
-                    currency
+                    currency,
+                    guestNames
                 }
             }
         }

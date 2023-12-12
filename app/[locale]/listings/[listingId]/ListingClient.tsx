@@ -62,6 +62,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
     const [isLoading, setIsLoading] = useState(false);
     const [totalPrice, setTotalPrice] = useState(listing.price);
     const [dateRange, setDateRange] = useState<Range>(initialDateRange);
+    const [adultCount, setAdultCount] = useState(1);
+    const [childrenCount, setChildrenCount] = useState(0);
     const [currentLocale, setCurrentLocale] = useState("es");
 
 
@@ -123,7 +125,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
         
 
         axios.post('/api/email-traveler', {
-            data: { language: currentLocale, amount: totalPrice, userNameTraveler: currentUser.name, userNameHost: listing.user.name, titleListing: listing.title, startDate:dateRange.startDate, endDate: dateRange.endDate, idReservation: idReservation},
+            data: { 
+                : currentLocale, amount: totalPrice, userNameTraveler: currentUser.name, userNameHost: listing.user.name, titleListing: listing.title, startDate:dateRange.startDate, endDate: dateRange.endDate, idReservation: idReservation},
         });
         axios.post('/api/email-host', {
             data: { language: currentLocale, amount: totalPrice, userNameTraveler: currentUser.name, userNameHost: listing.user.name, titleListing: listing.title, startDate:dateRange.startDate, endDate: dateRange.endDate, idReservation: idReservation},
@@ -227,6 +230,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
                             <ListingReservation 
                                 price={listing.price}
                                 totalPrice={totalPrice}
+                                adultCount={adultCount}
+                                childrenCount={childrenCount}
+                                onChangeAdult={(value) => setAdultCount(value)}
+                                onChangeChildren={(value) => setChildrenCount(value)}
                                 onChangeDate={(value) => setDateRange(value)}
                                 clean={listing.category=='Modern'}
                                 dateRange={dateRange}

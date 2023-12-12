@@ -16,7 +16,7 @@ const GMap: React.FC<GMapProps> = ({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
     libraries: ["places"],
   });
-  
+
   if(!isLoaded) return <div>Loading...</div>
    
   return (

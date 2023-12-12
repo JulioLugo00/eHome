@@ -6,7 +6,8 @@ import { CardElement, Elements, useElements, useStripe } from "@stripe/react-str
 import toast from "react-hot-toast";
 import {useTranslations} from 'next-intl';
 import { loadStripe } from "@stripe/stripe-js";
-import {useRouter} from 'next-intl/client';
+//import {useRouter} from 'next-intl/client';
+import { useRouter } from "next/navigation";
 import {format} from 'date-fns';
 import Image from 'next/image'
 
@@ -21,6 +22,11 @@ const PaymentClient: React.FC<PaymentClientProps> = ({
   currentUser,
 }) => {;
   const t = useTranslations('Index');
+  const router = useRouter();
+
+  const handleButtonClick = () => {
+    router.push('/');
+  };
 
   return (
     <div
@@ -77,6 +83,24 @@ const PaymentClient: React.FC<PaymentClientProps> = ({
     >
       {t("reservationEmail")}
     </p>
+    <div>
+    <button
+        onClick={handleButtonClick}
+        style={{
+          marginTop: '1rem',
+          padding: '0.5rem 1rem',
+          fontSize: '1rem',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+        }}
+      >
+        {t("backToHome")}
+      </button>
+    </div>
+  
   </div>
   );
 };

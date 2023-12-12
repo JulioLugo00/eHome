@@ -13,6 +13,9 @@ export async function POST(req: NextRequest) {
     const userNameHost = body.get('userNameHost');
     const userNameTraveler = body.get('userNameTraveler');
     const endDate = body.get('endDate');
+    const adultCount = body.get('adultCount');
+    const childrenCount = body.get('childrenCount');
+    const pendingReservationId = body.get('pendingReservationId');
     const id = body.get('listingId');
     const reservationId = body.get('pendingReservationId');
     const language = body.get('language');
@@ -31,7 +34,7 @@ export async function POST(req: NextRequest) {
           price_data: {
             currency: currency,
             product_data: {
-              name: title + " " + format(new Date(startDate as string), 'PP') + " " + format(new Date(endDate as string), 'PP'),
+              name: title + " " + format(new Date(startDate as string), 'PP') + " " + format(new Date(endDate as string), 'PP') + " " + adultCount + " " + childrenCount,
             },
             unit_amount: Math.round(parseFloat(amount) * 100),
           },
@@ -39,7 +42,7 @@ export async function POST(req: NextRequest) {
         },
       ],
       mode: 'payment',
-      success_url: 'http://localhost:3000/payment/',
+      success_url: 'http://localhost:3000/reservation/' + pendingReservationId,
       cancel_url: 'http://localhost:3000/listings/'+ id,
       metadata: {
         reservationId: reservationId,

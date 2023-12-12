@@ -221,6 +221,9 @@
       "reservationCreated": "Reservation created",
       "thanks": "Thank you",
       "reservationCreated": "Your reservation was created successfully.",
-      "reservationEmail": "An email has been sent to you with your reservation details."
+      "reservationEmail": "An email has been sent to you with your reservation details.",
+      "backToHome": "Back to home",
+      "taxes": "Taxes",
+      "namePerson":"Name of the person"
     }
 }

@@ -13,6 +13,7 @@ import axios from 'axios';
 import { toast } from "react-hot-toast";
 import { SafeUser } from '@/app/types';
 import Button from '../Button';
+import Counter from '../inputs/Counter';
 
 const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -21,8 +22,12 @@ const stripePromise = loadStripe(
 interface ListingReservationProps{
     price: number;
     dateRange: Range;
+    adultCount: number;
+    childrenCount: number;
     totalPrice: number;
     onChangeDate: (value: Range) => void;
+    onChangeAdult: (value: number) => void;
+    onChangeChildren: (value: number) => void;
     onSubmit: () => void;
     clean: boolean;
     disabled?: boolean;
@@ -36,9 +41,13 @@ interface ListingReservationProps{
 const ListingReservation: React.FC<ListingReservationProps> = ({
     price,
     dateRange,
+    adultCount,
+    childrenCount,
     totalPrice,
     clean,
     onChangeDate,
+    onChangeChildren,
+    onChangeAdult,
     onSubmit,
     disabled,
     disabledDates,
@@ -48,9 +57,10 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
     userHost
 }) => {
 
-    let tarifaServicio = (totalPrice*16.3/100);
-    let tarifaClean = totalPrice*10/100
-    let total = totalPrice + tarifaServicio;
+    let tarifaServicio = totalPrice*(16.3/100);
+    let tarifaClean = totalPrice*(10/100);
+    let tarifaImpuestos = totalPrice*(21/100);
+    let total = totalPrice + tarifaServicio + tarifaImpuestos;
     let Clean = (<div></div>);
     const t = useTranslations('Index');
     const currency = localStorage.getItem("currency");
@@ -210,8 +220,6 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
           const handleSubmit = async (event: { preventDefault: () => void; }) => {
             event.preventDefault();
         
-           
-        
             // Crear la reserva pendiente
             const response = await fetch('/api/createPendingReservation', {
               method: 'POST',
@@ -225,7 +233,12 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
                 endDate: dateRange.endDate, // Fecha de finalización
                 totalPrice: Math.round(total),
                 userNameHost: userHost.name, // Nombre del anfitrión
-                currency: currency
+                adultCount: adultCount, // Cantidad de huéspedes
+                childrenCount: childrenCount, // Cantidad de niños
+                currency: currency,
+                language: currentLocale,
+                listingTitle: listing.title,
+             
               }),
             });
         
@@ -241,6 +254,8 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
             // Configurar el formulario para enviar a Stripe
             const formData = new FormData();
             formData.append('amount', String(Math.round(total)));
+            formData.append('adultCount', String(Math.round(adultCount)));
+            formData.append('childrenCount', String(Math.round(childrenCount)));
             formData.append('startDate', String(dateRange.startDate));
             formData.append('endDate', String(dateRange.endDate));
             formData.append('amount', String(Math.round(total)));
@@ -249,6 +264,8 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
             formData.append('listingId', String(listing.id) ?? '');
             formData.append('pendingReservationId', pendingReservationId ?? '');
             formData.append('userNameHost', userHost.name ?? '');
+            formData.append('userNameTraveler', userTraveler?.name ?? '');
+            formData.append('language', currentLocale);
             formData.append('userNameTraveler', userTraveler?.name ?? '');
             formData.append('language', currentLocale);
 
@@ -311,6 +328,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
         total = total * parseInt(change.conversion_rates[moneda])
         tarifaServicio = tarifaServicio * parseInt(change.conversion_rates[moneda])
         tarifaClean = tarifaClean * parseInt(change.conversion_rates[moneda])
+        tarifaImpuestos = tarifaImpuestos * parseInt(change.conversion_rates[moneda])
         totalPrice = totalPrice * parseInt(change.conversion_rates[moneda])
         price = price *  parseInt(change.conversion_rates[moneda])
     }
@@ -356,6 +374,9 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
                 onChange={(value) => onChangeDate(value.selection)}
             />
             <hr />
+            <Counter title={"Adultos"} subtitle={"Cantidad de adultos"} value={adultCount} onChange={(value) => onChangeAdult(value)}/>
+            <hr />
+            <Counter title={"Niños"} subtitle={"Cantidad de niños"} value={childrenCount} onChange={(value) => onChangeChildren(value)}/>
             <div className="p-4">
             <PaymentForm2/>
                  {/*<Button 
@@ -388,6 +409,20 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
             ">
                 <div>{t('eHomeFee')}</div>
                 <MoneyValue value={tarifaServicio} currency={currency ? currency : "USD"} decimals={1}/>
+            </div>
+
+            <div className="
+                p-4
+                flex
+                flex-row
+                items-center
+                justify-between
+                text-md
+                underline
+                text-neutral-500
+            ">
+                <div>{t('taxes')}</div>
+                <MoneyValue value={tarifaImpuestos} currency={currency ? currency : "USD"} decimals={1}/>
             </div>
 
             <div className="

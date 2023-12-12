@@ -12,6 +12,9 @@ interface HomeProps{
 const Home = async({searchParams} : HomeProps) => {
   const listings = await getListings(searchParams);
   const currentUser = await getCurrentUser();
+  if(searchParams.cityGMap){
+    console.log(searchParams.cityGMap);
+  }
   if(listings.length == 0){
     return(
       <ClientOnly>
@@ -34,8 +37,10 @@ const Home = async({searchParams} : HomeProps) => {
           2xl:grid-cols-6
           gap-8
         ">
+          
           {listings.map((listing) =>{
             return (
+         
               <ListingCard 
                 currentUser={currentUser}
                 key={listing.id}

@@ -12,7 +12,11 @@ export async function POST(
         endDate,
         totalPrice,
         userNameHost,
-        currency
+        currency,
+        childrenCount,
+        adultCount,
+        language,
+        listingTitle
     } = body;
 
     try {
@@ -25,7 +29,11 @@ export async function POST(
             endDate,
             totalPrice,
             userNameHost,
-            currency
+            currency,
+            adultCount,
+            childrenCount,
+            language,
+            listingTitle
           },
         });
     

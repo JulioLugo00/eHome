@@ -220,8 +220,10 @@
       "reservationCreated": "Reservación creada",
       "thanks": "Gracias",
       "reservationCreated": "Su reservación ha sido confirmada exitosamente.",
-      "reservationEmail": "Se le ha enviado un correo electrónico con los detalles de su reservación."
-
+      "reservationEmail": "Se le ha enviado un correo electrónico con los detalles de su reservación.",
+      "backToHome": "Volver a la página principal",
+      "taxes": "Impuestos",
+      "namePerson":"Nombre de la persona"
 
     }
   }

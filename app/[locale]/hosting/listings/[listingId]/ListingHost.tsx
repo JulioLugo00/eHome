@@ -67,12 +67,13 @@ const ListingHost: React.FC<ListingHostProps> = ({
         }
 
         setIsLoading(true);
+        /*
 
         axios.post('/api/reservations', {
             totalPrice,
             startDate: dateRange.startDate,
             endDate: dateRange.endDate,
-            listingId: listing?.id
+            listingId: listing?.id,
         }).then(() => {
             toast.success('Property reserved!');
             setDateRange(initialDateRange);
@@ -82,6 +83,7 @@ const ListingHost: React.FC<ListingHostProps> = ({
         }).finally(() => {
             setIsLoading(false);
         })
+        */
     }, [totalPrice, dateRange, listing?.id, router, currentUser, loginModal]);
 
     useEffect(() => {

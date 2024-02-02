@@ -33,12 +33,14 @@ interface ListingClientProps{
         user: SafeUser
     };
     currentUser: SafeUser | null;
+    reviews: any
 }
 
 const ListingClient: React.FC<ListingClientProps> = ({
     listing,
     reservations = [],
-    currentUser
+    currentUser,
+    reviews
 }) => {
     const loginModal = useLoginModal();
     const router = useRouter();
@@ -132,6 +134,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
             data: { language: currentLocale, amount: totalPrice, userNameTraveler: currentUser.name, userNameHost: listing.user.name, titleListing: listing.title, startDate:dateRange.startDate, endDate: dateRange.endDate, idReservation: idReservation},
         });
         */
+       /*
 
         try {
             // Espera a que la reserva sea creada antes de continuar
@@ -179,6 +182,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   } finally {
     setIsLoading(false);
   }
+  */
         
     }, [totalPrice, dateRange, listing?.id, router, currentUser, loginModal]);
 
@@ -225,6 +229,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
                             bathroomCount={listing.bathroomCount}
                             longitude={listing.longitude}
                             latitude={listing.latitude}
+                            reviews={reviews}
+                      
                         />
                         <div className="order-first mb-10 md:order-last md:col-span-3">
                             <ListingReservation 

@@ -83,7 +83,7 @@ const HostMenu = () => {
                         label={t("createListing")} />
                         <hr />
                         <MenuItem 
-                        onClick={() => {}}
+                        onClick={() => {router.push('/manage-guidebook')}}
                         modal={true}
                         route=''
                         label={t("guidebooks")} />

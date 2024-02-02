@@ -228,8 +228,10 @@ const RentModal = () => {
     if(step == STEPS.LOCATION){
         bodyContent = (
             <div className="flex flex-col gap-8">
-                <Heading title={t("titleLocation")} subtitle={t("subtitleLocation")}/>          
-                <GMap center={addressGMap?.latlng}/>
+                <Heading title={t("titleLocation")} subtitle={t("subtitleLocation")}/>   
+                <div className="w-full" style={{ height: '300px', position: 'relative' }}>       
+                <GMap center={addressGMap?.latlng} />
+                </div>
                 <AddressSelect value={addressGMap} onChange={(value) => setCustomValue('addressGMap', value)}/>
             </div>
         );

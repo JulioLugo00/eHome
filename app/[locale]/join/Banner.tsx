@@ -218,7 +218,7 @@ const Banner: React.FC<BannerProps> = ({currentUser}) => {
                             </div>
                             <div>
                                 <img
-                                src="https://cibergestion.com/wp-content/uploads/2022/12/5127314-scaled.jpg"
+                                src={"/images/operador.jpg"}
                                 alt="Equipo de soporte de e-home"
                                 className="w-full h-auto rounded-lg shadow-md"
                                 />
@@ -246,7 +246,6 @@ const Banner: React.FC<BannerProps> = ({currentUser}) => {
                 </Container>
             </div>
         </div>
-
     );
 }
 

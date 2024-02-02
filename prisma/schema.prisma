@@ -41,9 +41,11 @@ model User {
   
   seenMessageIds String[] @db.ObjectId
   seenMessages Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
+  guidebooks Guidebook[]
 
   accounts     Account[]
   listings     Listing[]
+  reviews      Review[]
   reservations Reservation[]
   messages Message[]
 }
@@ -85,7 +87,8 @@ model Listing {
   monthlyDiscount  Int
   firstReservation Boolean  @default(false)
   country          String   
-  address          String   
+  address          String
+  
   city             String  
   state            String  
   zipCode          String 
@@ -99,6 +102,20 @@ model Listing {
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
+  reviews      Review[]
+  guidebooks GuidebookListing[]
+}
+
+model Review {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @db.ObjectId
+  listingId  String   @db.ObjectId
+  createdAt  DateTime @default(now())
+  body       String
+  rating     Int
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }
 
 model Reservation {
@@ -108,9 +125,13 @@ model Reservation {
   startDate  DateTime
   endDate    DateTime
   totalPrice Int
+  isReviewed Boolean @default(false)
+
+  confirmed Boolean @default(false)
   currency String
   guestNames String[]
   createdAt  DateTime @default(now())
+  conversationId String @db.ObjectId
 
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
@@ -126,11 +147,13 @@ model PendingReservation {
   endDate    DateTime
   totalPrice Int
   userNameHost String
+  userIdHost String
   currency String
   adultCount Int
   childrenCount Int
+  guestCount Int
+  image String
 }
-
 
 model Conversation {
   id String @id @default(auto()) @map("_id") @db.ObjectId
@@ -138,6 +161,7 @@ model Conversation {
   lastMessageAt DateTime @default(now())
   name String?
   isGroup Boolean?
+  image String?
   
   messagesIds String[] @db.ObjectId
   messages Message[]
@@ -161,3 +185,80 @@ model Message {
   senderId String @db.ObjectId
   sender User @relation(fields: [senderId], references: [id], onDelete: Cascade)
 }
+
+model Guidebook {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  coverImage String?
+  createdAt DateTime @default(now())
+  userId String @db.ObjectId
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  zones Zone[]
+  places Place[]
+  towns Town[]
+  advices Advice[]
+  listings GuidebookListing[]
+}	
+
+model Place {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  image String
+  classification String
+  description String
+
+  guidebookId String @db.ObjectId
+  category String
+  latitude Float
+  longitude Float
+  guidebook Guidebook @relation(fields: [guidebookId], references: [id], onDelete: Cascade)
+}
+
+model Zone {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  image String
+  description String
+  guidebookId String @db.ObjectId
+  latitude Float
+  longitude Float
+  
+  guidebook Guidebook @relation(fields: [guidebookId], references: [id], onDelete: Cascade)
+}
+
+model Town {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  image String
+  description String
+  guidebookId String @db.ObjectId
+  latitude Float
+  longitude Float
+  
+  guidebook Guidebook @relation(fields: [guidebookId], references: [id], onDelete: Cascade)
+}
+
+model Advice {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  category String
+  title String
+  body String
+  guidebookId String @db.ObjectId
+  
+  guidebook Guidebook @relation(fields: [guidebookId], references: [id], onDelete: Cascade)
+}
+
+// Esta tabla de unión representa la relación entre Guidebook y Listing
+model GuidebookListing {
+  id String   @id @default(auto()) @map("_id") @db.ObjectId
+  guidebookId String @db.ObjectId
+  listingId  String @db.ObjectId
+  
+  guidebook Guidebook @relation(fields: [guidebookId], references: [id])
+  listing   Listing   @relation(fields: [listingId], references: [id])
+  
+  @@unique([guidebookId, listingId])
+}
+

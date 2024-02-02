@@ -3,7 +3,7 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY as string, {
   typescript: true,
-  apiVersion: "2023-10-16",
+  apiVersion: "2023-08-16",
 });
 
 export async function POST(req: NextRequest) {

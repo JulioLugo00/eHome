@@ -147,6 +147,11 @@ const UserMenu: React.FC<UserMenuProps> = ({
                             label={t('my_favorites')}/>
 
                             <MenuItem 
+                            onClick={() => router.push("/conversations")}
+                            route='/conversations'
+                            label={t('my_conversations')}/>
+
+                            <MenuItem 
                             onClick={rentModal.onOpen}
                             prefetch={true}
                             route={location.pathname.includes('/hosting') ? '/' : '/hosting'}

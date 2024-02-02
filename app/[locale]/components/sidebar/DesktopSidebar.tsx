@@ -2,14 +2,13 @@
 
 import DesktopItem from "./DesktopItem";
 import useRoutes from "@/app/hooks/useRoutes";
-
+import SettingsModal from "./SettingsModal";
 import { useState } from "react";
 import Avatar from "../Avatar";
 import { User } from "@prisma/client";
-import { SafeUser } from "@/app/types";
 
 interface DesktopSidebarProps {
-  currentUser: SafeUser
+  currentUser: User
 }
 
 const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
@@ -22,6 +21,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
 
   return ( 
     <>
+      <SettingsModal currentUser={currentUser} isOpen={isOpen} onClose={() => setIsOpen(false)} />
       <div className="
         hidden 
         lg:fixed 
@@ -57,7 +57,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
             onClick={() => setIsOpen(true)} 
             className="cursor-pointer hover:opacity-75 transition"
           >
-            <Avatar src={currentUser.image}/>
+            <Avatar src={currentUser.image} />
           </div>
         </nav>
       </div>

@@ -79,8 +79,9 @@ input[type=checkbox]{
 
 .map-container {
   width: 100%; /* Ancho del contenedor del mapa */
-  height: 400px; /* Altura del contenedor del mapa */
+  height: 100%; /* Altura del contenedor del mapa */
   /* Otros estilos CSS según tus necesidades */
+  z-index: 1;
 }
 
 .combobox-input {

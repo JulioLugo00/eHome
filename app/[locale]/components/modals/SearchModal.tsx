@@ -1,4 +1,4 @@
-'use client';
+    'use client';
 
 import qs from "query-string";
 import useSearchModal from "@/app/hooks/useSearchModal";
@@ -56,28 +56,6 @@ const SearchModal = () => {
         searchModal.onClose();
     }
 
-
-    useEffect(() => {
-        if (address?.cityGMap) {
-            const fetchListings = async () => {
-                try {
-                
-                    const { data } = await axios.post("/api/getListings", {
-                        data: { cityGMapt: address?.cityGMap },
-                    });
-                    setListings(data);  
-                } catch (error) {
-                    console.error("Error fetching listings:", error);
-                }
-            };
-
-            fetchListings();
-        } else {
-            setListings([]);
-        }
-    }, [address]);
-    // Change the type of the state variable to match the type of the objects you are trying to set
-    
     const onNext = useCallback(() => {
         setStep((value) => value+1);
     }, []);
@@ -142,8 +120,6 @@ const SearchModal = () => {
                 title={t('titleWhere')}
                 subtitle={t('subtitleWhere')}
             />
-
-            <GMapListings center={address?.latlng} listings={listings} handleClose={handleCloseModal}/>
             <AddressSelect
                 value={address}
                 onChange={(value) => setAddress(value as AddressSelectValue)}

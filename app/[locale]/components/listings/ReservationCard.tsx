@@ -19,7 +19,7 @@ interface ReservationCardProps{
     currentUser?: SafeUser | null; 
     reservation?: SafeReservation;
     data: SafeListing;
-    onAction?: (id:string) => void;
+    onAction?: (id:string, reservation:SafeReservation) => void;
     disabled?: boolean;
     actionLabel?: string;
     actionId?: string;
@@ -53,10 +53,9 @@ const ReservationCard: React.FC<ReservationCardProps> = ({
                 return;
             }
 
-            onAction?.(actionId);
+            onAction?.(actionId, reservation as SafeReservation);
         }, [onAction, actionId, disabled]);
         
-
     let price = useMemo(() => {
         if(reservation){
             return reservation.totalPrice;

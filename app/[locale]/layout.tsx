@@ -18,6 +18,8 @@ import {notFound} from 'next/navigation';
 import fetchExchangeRates from "../actions/getChange"
 import getListings from "../actions/getListings"
 import { Inter } from "next/font/google";
+import ActiveStatus from "./components/ActiveStatus"
+import CreateReviewModal from "./components/modals/CreateReviewModal"
 
 export const metadata = {
   title: 'eHome',
@@ -49,6 +51,7 @@ export default async function RootLayout({children, params: {locale}}: {children
               <SearchModal/>
               <RentModal/>
               <TranslateModal />
+              <ActiveStatus />
               <LoginModal/>
               <RegisterModal/>
               <ProfileModal userId={userId} currentUser={currentUser}/>

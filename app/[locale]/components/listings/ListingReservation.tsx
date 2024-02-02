@@ -14,6 +14,7 @@ import { toast } from "react-hot-toast";
 import { SafeUser } from '@/app/types';
 import Button from '../Button';
 import Counter from '../inputs/Counter';
+import {useRouter} from 'next-intl/client';
 
 const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -64,7 +65,12 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
     let Clean = (<div></div>);
     const t = useTranslations('Index');
     const currency = localStorage.getItem("currency");
+
+    if (currency === null) {
+        localStorage.setItem("currency", "USD");
+    }
     const [currentLocale, setCurrentLocale] = useState("es");
+    const router = useRouter();
 
     useEffect(() => {
       // Check to see if this is a redirect back from Checkout
@@ -219,6 +225,22 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
 
           const handleSubmit = async (event: { preventDefault: () => void; }) => {
             event.preventDefault();
+
+            if (!userTraveler) {
+              toast.error(t('mustBeLoggedIn'));
+              return;
+            } 
+
+            if (userTraveler && (userTraveler.id === userHost.id)) {
+              toast.error(t('cantReserveOwnListing'));
+              return;
+            }
+
+            if (listing.guestCount < (adultCount + childrenCount)) {
+              toast.error(t('tooManyGuests'));
+              return;
+            }
+
         
             // Crear la reserva pendiente
             const response = await fetch('/api/createPendingReservation', {
@@ -233,11 +255,14 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
                 endDate: dateRange.endDate, // Fecha de finalización
                 totalPrice: Math.round(total),
                 userNameHost: userHost.name, // Nombre del anfitrión
+                userIdHost: userHost.id, // ID del anfitrión
                 adultCount: adultCount, // Cantidad de huéspedes
                 childrenCount: childrenCount, // Cantidad de niños
                 currency: currency,
                 language: currentLocale,
                 listingTitle: listing.title,
+                image: listing.imageSrc[0],
+                guestCount: listing.guestCount,
              
               }),
             });
@@ -250,8 +275,11 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
         
             const pendingReservation = await response.json();
             const pendingReservationId = pendingReservation.id;
+            router.push(`/checkout/${pendingReservation.id}`)}
 
             // Configurar el formulario para enviar a Stripe
+
+            /*
             const formData = new FormData();
             formData.append('amount', String(Math.round(total)));
             formData.append('adultCount', String(Math.round(adultCount)));
@@ -283,6 +311,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
             });
             form.submit();
           };
+          */
         
           return (
             <form onSubmit={handleSubmit}>

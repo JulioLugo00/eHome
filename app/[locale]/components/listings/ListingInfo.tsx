@@ -8,6 +8,8 @@ import {useRouter} from 'next-intl/client';
 import {useTranslations} from 'next-intl';
 import GMap from "../GMap";
 import React, { useState, useEffect } from 'react';
+import { FaStar } from "react-icons/fa";
+import SeeReviewModal from "../modals/SeeReviewModal";
 
 
 
@@ -24,6 +26,7 @@ interface ListingInfoProps{
     }  | undefined
     longitude:  number | null;
     latitude: number | null;
+    reviews: any;
 
 }
 
@@ -35,15 +38,25 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
     bathroomCount,
     category,
     longitude,
-    latitude
+    latitude,
+    reviews
 }) => {
 
     const router = useRouter();
-
+    const [isSeeReviewModalOpen, setIsSeeReviewModalOpen] = useState(false);
     const [currentLocale, setCurrentLocale] = useState("es");
     const t = useTranslations('Index');
     const [translatedDescription, setTranslatedDescription] = useState<string | null>(null);
+    const totalRating = reviews.reduce((sum: any, review: { rating: any; }) => sum + review.rating, 0);
+const averageRating = totalRating / reviews.length;
+
+const handleSeeReviewsClose = () => {
+    // Cierra el modal de confirmación
+    setIsSeeReviewModalOpen(false);
+};
+
     
+
     useEffect(() => {
       // Traduce la descripción al montar el componente
       const extractedLocale = window.location.pathname.split('/')[1];
@@ -73,7 +86,16 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
   }, [description]);
 
     return(
+
+
+
+        
         <div className="col-span-4 flex flex-col gap-8">
+            <SeeReviewModal
+            isOpen={isSeeReviewModalOpen}
+            onConfirm={handleSeeReviewsClose}
+            reviews={reviews}
+            />
             <div className="flex flex-col gap-2">
                 <div onClick={() => router.push(`/users/${user?.id}`)} className="
                     text-xl
@@ -97,6 +119,10 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
                     <div>
                         {bathroomCount} {t('bathrooms').toLowerCase()}
                     </div>
+                    <div onClick={() => setIsSeeReviewModalOpen(true)} className="flex items-center text-lg font-light text-neutral-500">
+                {averageRating.toFixed(1)} {/* Mostrar el promedio con un decimal */}
+                <FaStar className="ml-1 text-yellow-500" /> {/* Icono de estrella */}
+            </div>
                 </div>
             </div>
             <hr />

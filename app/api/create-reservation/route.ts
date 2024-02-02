@@ -14,7 +14,8 @@ export async function POST(
         totalPrice,
         userId,
         currency,
-        guestNames
+        guestNames,
+        conversationId
     } = body;
 
     if(!listingId || !startDate || !endDate || !totalPrice || !userId || !currency){
@@ -33,7 +34,9 @@ export async function POST(
                     endDate,
                     totalPrice,
                     currency,
-                    guestNames
+                    guestNames,
+
+                    conversationId
                 }
             }
         }

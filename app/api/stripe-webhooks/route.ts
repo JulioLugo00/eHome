@@ -10,6 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_API_KEY!, {
 const webhookSecret = process.env.STRIPE_ENDPOINT_SECRET;
 
 export async function POST (req: Request) {
+  /*
     const body = await req.text();
     const signature = headers().get("Stripe-Signature") as string;
 
@@ -98,5 +99,6 @@ console.error('Error creating reservation:', reservationError);
     }
     }
 
-    return new NextResponse("Webhook Handled", { status: 200 })
+    return new NextResponse("Webhook Handled", { status: 200 })*/
+    
 };

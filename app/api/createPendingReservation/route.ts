@@ -12,11 +12,14 @@ export async function POST(
         endDate,
         totalPrice,
         userNameHost,
+        userIdHost,
         currency,
         childrenCount,
         adultCount,
         language,
-        listingTitle
+        listingTitle,
+        image,
+        guestCount
     } = body;
 
     try {
@@ -29,11 +32,14 @@ export async function POST(
             endDate,
             totalPrice,
             userNameHost,
+            userIdHost,
             currency,
             adultCount,
             childrenCount,
             language,
-            listingTitle
+            listingTitle,
+            image,
+            guestCount
           },
         });
     

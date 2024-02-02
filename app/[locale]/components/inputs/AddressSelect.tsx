@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {useTranslations} from 'next-intl';
 import { useLoadScript } from "@react-google-maps/api";
 import usePlacesAutocomplete, {
   getGeocode,
@@ -8,7 +9,8 @@ import "@reach/combobox/styles.css";
 
 export type AddressSelectValue = {
   latlng: number[];
-  cityGMap: string;
+  cityGMap?: string;
+  name?: string;
 };
 
 interface AddressSelectProps {
@@ -53,17 +55,23 @@ const PlacesAutocomplete = ({
     setValue(address, false);
     clearSuggestions();
     const results = await getGeocode({ address });
+    
     let cityGMap = ""
+
+    console.log("resultados", results)
 
     for (let i = 0; i < results[0].address_components.length; i++) {
       if (results[0].address_components[i].types.includes('locality')) {
           cityGMap = results[0].address_components[i].long_name;  // o .short_name si prefieres la versión corta
       }
     }
+    const hastaLaPrimeraComa = address.split(',')[0];
 
     const { lat, lng } = await getLatLng(results[0]);
-    onChange({ latlng: [lat, lng], cityGMap: cityGMap });
+    onChange({ latlng: [lat, lng], cityGMap: cityGMap, name: hastaLaPrimeraComa});
   };
+
+  const t = useTranslations('Index');
 
   return (
     <div>
@@ -72,7 +80,7 @@ const PlacesAutocomplete = ({
         onChange={(e) => setValue(e.target.value)}
         disabled={!ready}
         className="combobox-input"
-        placeholder="Search an address"
+        placeholder={t("searchAddress")}
       />
       {status === "OK" && (
         <ul>

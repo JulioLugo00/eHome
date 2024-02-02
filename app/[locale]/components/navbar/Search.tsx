@@ -16,7 +16,7 @@ const Search = () => {
 
     const {getByValue} = useCountries();
 
-    const country = params?.get('country');
+    const country = params?.get('cityGMap');
     const startDate = params?.get('startDate');
     const endDate = params?.get('endDate');
     const guestCount = params?.get('guestCount');

@@ -138,6 +138,7 @@ const handleSeeReviewsClose = () => {
             {translatedDescription || description} {/* Muestra la descripción traducida o la original si la traducción no está disponible */}
             </div>
             <hr />
+             {/* Es necesario especificar el tamaño del gmap para que se muestre correctamente, tambien posiblemente position ya sea fixed, relative o absolute */}
             <GMap center={[latitude || 0, longitude || 0]} />
         </div>
     );

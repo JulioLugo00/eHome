@@ -45,17 +45,25 @@ const ManageGuidebookClient: React.FC<ManageGuidebookClientProps> = ({
             subtitle={"Las guias son una forma de compartir recomendaciones con tus huéspedes."}
           />
     
-          <div className=" py-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-7 2xl:grid-cols-8 gap-8">
+          <div className="  pt-5 grid
+              grid-cols-1
+              sm:grid-cols-2
+              md:grid-cols-3
+              lg:grid-cols-4
+              xl:grid-cols-5
+              2xl:grid-cols-6
+              gap-2">
             {guidebooks.map((guidebook: any, index: React.Key | null | undefined) => (
-              <div key={index} className="relative cursor-pointer rounded-lg overflow-hidden" onClick={() => router.push(`/manage-guidebook/${guidebook.id}`)}>
+              <div className="overflow-hidden cursor-pointer" key={index}  onClick={() => router.push(`/manage-guidebook/${guidebook.id}`)}>
                 <Image
                   alt="Guidebook cover"
-                  layout="fill"
-                  objectFit="cover"
+                  width={300}
+                  height={300}
+                  className="object-cover h-full w-full hover:scale-110 transition"
            
                   src={guidebook.coverImage   || "/images/guidebookPlaceholder.png"}
                 />
-                <div className="absolute bottom-0 left-0 w-full bg-opacity-50 bg-black text-white p-2">
+                <div className="relative bottom-10 left-0 w-full bg-opacity-50 bg-black text-white p-2">
                   {/* Truncamiento de texto con elipsis */}
                   <h3 className="truncate">{guidebook.title}</h3>
                   {/* O puedes usar ajuste de texto */}
@@ -64,14 +72,15 @@ const ManageGuidebookClient: React.FC<ManageGuidebookClientProps> = ({
                 </div>
               </div>
             ))}
-            <div className="relative cursor-pointer rounded-lg overflow-hidden">
+            <div onClick={handleCreateGuidebook} className="relative cursor-pointer">
               <Image
                   alt="Guidebook cover"
-                  height="200"
-                  width="200"
+                  width={300}
+                  height={300}
+                  className="object-cover h-full w-full"
                   src="/images/guidebookPlaceholder.png"
                 />
-            <button className="rounded-lg border border-white hover:bg-gray-200 px-1 py-1 mt-4 absolute bottom-1 right-3  text-white p-2" onClick={handleCreateGuidebook}>Crear Guía</button>
+              <h1 className="absolute  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  text-white " >Crear Guía</h1>
             </div>
           </div>
         </div>

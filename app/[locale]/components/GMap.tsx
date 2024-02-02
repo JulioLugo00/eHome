@@ -31,6 +31,7 @@ const GMap: React.FC<GMapProps> = ({
           setMapLoaded(true);
         }}
       >
+        {/* MarkerF arregla los errores al no mostrar los marcadores en comparación a Marker*/}
         {mapLoaded && center && (
   <MarkerF
 

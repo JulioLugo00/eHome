@@ -230,6 +230,7 @@ const RentModal = () => {
             <div className="flex flex-col gap-8">
                 <Heading title={t("titleLocation")} subtitle={t("subtitleLocation")}/>   
                 <div className="w-full" style={{ height: '300px', position: 'relative' }}>       
+                {/* Es necesario especificar el tamaño del gmap para que se muestre correctamente, tambien posiblemente position ya sea fixed, relative o absolute */}
                 <GMap center={addressGMap?.latlng} />
                 </div>
                 <AddressSelect value={addressGMap} onChange={(value) => setCustomValue('addressGMap', value)}/>

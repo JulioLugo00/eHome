@@ -57,7 +57,8 @@ const Home = async({searchParams} : HomeProps) => {
           </div>
   
          {/* Columna para GMapListings */}
-        <div className="hidden md:block w-1/3  right-0 top-0 h-full" style={{ width: '30%', position: 'fixed', right: 0, top: 0, bottom: 0, overflowY: 'auto' }}>
+         {/* Es necesario especificar el tamaño del gmap para que se muestre correctamente, tambien posiblemente position ya sea fixed, relative o absolute */}
+        <div className="hidden lg:block w-1/3  right-0 top-0 h-full" style={{ width: '30%', position: 'fixed', right: 0, top: 0, bottom: 0, overflowY: 'auto' }}>
           {searchParams.cityGMap && 
             <GMapListings 
               listings={listings} 

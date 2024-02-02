@@ -160,7 +160,7 @@ const Hosting: React.FC<HostingProps> =({
             />
             )}
                 <div style={{ display: 'flex', flexDirection: 'row'}}>
-                    <div style={{ width: '50%', overflowY: 'auto' }}>
+                    <div className={"lg:w-1/2"}style={{  overflowY: 'auto' }}>
                         <Heading
                             title={`Reservación en ${reservation?.listing?.title}`}
                             subtitle=""
@@ -216,12 +216,15 @@ const Hosting: React.FC<HostingProps> =({
                         </div>
 
                     </div>
-                    <div className="hidden md:block" style={{ width: '50%', position: 'fixed', right: 0, top: 0, bottom: 0, overflowY: 'auto' }}> {/* Ajusta el ancho según sea necesario */}
+                    {/* Es necesario especificar el tamaño del gmap para que se muestre correctamente, tambien posiblemente position ya sea fixed, relative o absolute */}
+                    <div className="hidden lg:block" style={{ width: '50%', position: 'fixed', right: 0, top: 0, bottom: 0, overflowY: 'auto' }}> {/* Ajusta el ancho según sea necesario */}
                         {/* Componente del mapa, ocupando toda la altura de la pantalla */}
                         <GMap center={[reservation?.listing.latitude || 0, reservation?.listing.longitude || 0]} />
-
                     </div>
                 </div>
+                <div className="block lg:hidden w-full" style={{ height: '300px', position: 'relative' }}>
+                <GMap center={[reservation?.listing.latitude || 0, reservation?.listing.longitude || 0]} />
+    </div>
         </Container>
     )
 }

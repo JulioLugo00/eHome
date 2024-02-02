@@ -34,6 +34,7 @@ const GMapGuidebook: React.FC<GMapGuidebookProps> = ({
         center={center ? { lat: center[0], lng: center[1] } : { lat: 44, lng: -80 }}
         mapContainerClassName="map-container"
       >
+        {/* MarkerF arregla los errores al no mostrar los marcadores en comparación a Marker*/}
         {center && <MarkerF visible={false} position={{ lat: center[0], lng: center[1] }}/>}
         {places && places.map((place: { id: string; latitude: number; longitude: number; name: string; }) => (
                       <MarkerWithInfo  id={place.id} latitude={place.latitude} longitude={place.longitude} text={place.name}/>

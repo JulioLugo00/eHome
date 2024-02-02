@@ -37,6 +37,7 @@ const GMapListings: React.FC<GMapListingsProps> = ({
         center={center ? { lat: center[0], lng: center[1] } : { lat: 44, lng: -80 }}
         mapContainerClassName="map-container"
       >
+        {/* MarkerF arregla los errores al no mostrar los marcadores en comparación a Marker*/}
         {center && <MarkerF visible={false} position={{ lat: center[0], lng: center[1] }}/>}
         {listings && listings.map((listing: { latitude: any; longitude: any; imageSrc: string[]; price: any; id: any}) => (
          

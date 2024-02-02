@@ -47,10 +47,6 @@ else if (zones.length > 0){
 else if (towns.length > 0){
   center = [towns[0].latitude, towns[0].longitude];
 }
-else{
-  
-}
-
 
 const handleCancelAddToGuide = () => {
     // Cierra el modal de confirmación
@@ -115,7 +111,7 @@ return (
     </div>
 
     <div style={{ display: 'flex', flexDirection: 'row'}}>
-    <div style={{ width: '50%', overflowY: 'auto' }}>
+    <div className={" lg:w-2/3"} style={{  overflowY: 'auto' }}>
 
 
     {places.length > 0 && (
@@ -189,7 +185,8 @@ return (
       </div>
       
     </div>
-    <div className="hidden md:block" style={{ width: '30%', position: 'fixed', right: 0, top: 0, bottom: 80, overflowY: 'auto' }}> {/* Ajusta el ancho según sea necesario */}
+    {/* Es necesario especificar el tamaño del gmap para que se muestre correctamente, tambien posiblemente position ya sea fixed, relative o absolute */}
+    <div className="hidden lg:block" style={{ width: '30%', position: 'fixed', right: 0, top: 0, bottom: 80, overflowY: 'auto' }}> {/* Ajusta el ancho según sea necesario */}
                         {/* Componente del mapa, ocupando toda la altura de la pantalla */}
                       {center &&  <GMapGuidebook center={center} zones={zones} towns={towns} places={places} />}
 
@@ -197,12 +194,10 @@ return (
     </div>
 
 
-
+    <div className="block lg:hidden w-full" style={{ height: '300px', position: 'relative' }}>
+      {center &&  <GMapGuidebook center={center} zones={zones} towns={towns} places={places} />}
+    </div>
    
-
-
-
-
     <div className="fixed bottom-4 right-4">
       <button
         className="rounded-lg border border-white bg-black hover:bg-gray-800 text-white px-4 py-2 focus:outline-none"

@@ -217,8 +217,9 @@ const Banner: React.FC<BannerProps> = ({currentUser}) => {
                                 </p>
                             </div>
                             <div>
+
                                 <img
-                                src={"/images/operador.jpg"}
+                                src={"/images/operadorImagenConCopyright.jpg"}
                                 alt="Equipo de soporte de e-home"
                                 className="w-full h-auto rounded-lg shadow-md"
                                 />

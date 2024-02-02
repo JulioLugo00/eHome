@@ -36,6 +36,22 @@ const ManageGuidebookClientId: React.FC<ManageGuidebookClientIdProps> = ({
 const [isManageGuidebookModalOpen, setIsManageGuidebookModalOpen] = useState(false);
 const [isTitleCoverModalOpen, setIsTitleCoverModalOpen] = useState(false);
 
+let center = null;
+
+if(places.length > 0){
+   center = [places[0].latitude, places[0].longitude];
+}
+else if (zones.length > 0){
+   center = [zones[0].latitude, zones[0].longitude];
+}
+else if (towns.length > 0){
+  center = [towns[0].latitude, towns[0].longitude];
+}
+else{
+  
+}
+
+
 const handleCancelAddToGuide = () => {
     // Cierra el modal de confirmación
     setIsManageGuidebookModalOpen(false);
@@ -175,7 +191,7 @@ return (
     </div>
     <div className="hidden md:block" style={{ width: '30%', position: 'fixed', right: 0, top: 0, bottom: 80, overflowY: 'auto' }}> {/* Ajusta el ancho según sea necesario */}
                         {/* Componente del mapa, ocupando toda la altura de la pantalla */}
-                        <GMapGuidebook center={[zones[0].latitude, zones[0].longitude]} zones={zones} towns={towns} places={places} />
+                      {center &&  <GMapGuidebook center={center} zones={zones} towns={towns} places={places} />}
 
     </div>
     </div>

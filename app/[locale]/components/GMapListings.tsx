@@ -33,14 +33,14 @@ const GMapListings: React.FC<GMapListingsProps> = ({
   return (
     <>
       <GoogleMap
-        zoom={10}
+        zoom={13}
         center={center ? { lat: center[0], lng: center[1] } : { lat: 44, lng: -80 }}
         mapContainerClassName="map-container"
       >
         {center && <MarkerF visible={false} position={{ lat: center[0], lng: center[1] }}/>}
         {listings && listings.map((listing: { latitude: any; longitude: any; imageSrc: string[]; price: any; id: any}) => (
          
-                      <MarkerWithInfo  id={listing.id} latitude={listing.latitude} longitude={listing.longitude} text={listing.price+currency} />
+                      <MarkerWithInfo  id={listing.id} latitude={listing.latitude} longitude={listing.longitude} text={listing.price+" "+ currency} />
                   ))}
         
       </GoogleMap>
